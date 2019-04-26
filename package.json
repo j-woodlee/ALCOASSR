@@ -1,0 +1,22 @@
+{
+  "name": "alcoassr",
+  "version": "1.0.0",
+  "description": "Programming environment for Alameda County Assessor",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/j-woodlee/ALCOASSR.git"
+  },
+  "author": "Jake Woodlee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/j-woodlee/ALCOASSR/issues"
+  },
+  "homepage": "https://github.com/j-woodlee/ALCOASSR#readme",
+  "dependencies": {
+    "exceljs": "^1.9.1"
+  }
+}
