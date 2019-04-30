@@ -2,7 +2,9 @@ let Excel = require('exceljs');
 let workbook = new Excel.Workbook();
 
 let filePath = process.argv[2];
-let targetColIndex = parseInt(process.argv[3], 10);  // save the index of the column we will write to
+
+let targetColIndex = process.argv[3];  // save the index of the column we will write to
+
 
 workbook.xlsx.readFile(filePath)
     .then(function() {
