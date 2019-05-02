@@ -13,6 +13,7 @@ let delimiter = process.argv[6];
 
 workbook.xlsx.readFile(filePath)
     .then(function() {
+
         let worksheet = workbook.getWorksheet(worksheetName);
         // console.log(worksheet);
         // console.log(filePath + rawAPNCol + targetColIndex);
