@@ -3,24 +3,63 @@ let workbook = new Excel.Workbook();
 
 let filePath = process.argv[2];
 
-let targetColIndex = process.argv[3];  // save the index of the column we will write to
+let worksheetName = process.argv[3];
 
+let rawAPNCol = process.argv[4]; // index of the column with raw apns
+
+let targetColIndex = process.argv[5];  // save the index of the column we will write to
+
+let delimiter = process.argv[6];
 
 workbook.xlsx.readFile(filePath)
     .then(function() {
-        let worksheet = workbook.getWorksheet(1);
-        let apns = worksheet.getColumn(1).values.slice(0);  // save the apns in a a copy of the actual array
+        let worksheet = workbook.getWorksheet(worksheetName);
+        // console.log(worksheet);
+        // console.log(filePath + rawAPNCol + targetColIndex);
+        let apns = worksheet.getColumn(rawAPNCol).values.slice(0);  // save the apns in a a copy of the actual array
 
+        apns.shift(); // remove the extra values in the beginning of the apn array
+        apns.shift();
 
-        apns.shift(); // remove the extra value in the beginning of the apn array
-
-        console.log(apns);
+        // console.log(apns);
 
         for (let i = 0; i < apns.length; i++) {  // edit each string within the apn array
-            apns[i] = apns[i].replace(/-/g, '');
+
+          let regex1 = new RegExp("[0-9]*[a-zA-Z]{1}[0-9]*[a-zA-Z]{1}[0-9]*");
+
+            if (regex1.test(apns[i])) {
+                console.log("regex terminate: " + apns[i]);
+                continue;
+            }
+
+            let apn = apns[i].split(delimiter);
+
+
+            let book = apn[0];
+            let page = apn[1];
+            let parcel = apn[2];
+            let subPN = apn[3];
+
+            book = book.replace(/\s/g, ''); // remove all spaces
+
+
+
+            if (book.length === 3) {
+              book = "0" + book;
+            }
+
+            if (subPN == undefined) {
+              subPN = "00";
+            }
+
+            // concatenate all 4 strings
+            apns[i] = book + " " + page + " " + parcel + " " + subPN;
+
+
+            console.log(apns[i]);
         }
 
-        console.log(apns);
+        // console.log(apns);
 
         if (worksheet.getColumn(targetColIndex).values.length !== 0) {  // before we write the data, make sure the column is empty
                console.log("Error: Target column must be empty, try again with a different index.");
@@ -35,11 +74,5 @@ workbook.xlsx.readFile(filePath)
 
 
 let usage = () => {
-    return "Usage: excelparse.js <path to file> <index of target column> <type of manipulation(coming soon)>"
+    return "Usage: excelparse.js <path to file> <name of worksheet> <index of raw apn column> <index of target column> <delimiter>"
 }
-
-// console.log(process.argv[2]);
-// let row = worksheet.getRow(5);
-
-// row.getCell(1).value = 5; // A5's value set to 5
-// row.commit();
