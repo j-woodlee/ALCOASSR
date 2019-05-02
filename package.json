@@ -18,7 +18,9 @@
   "homepage": "https://github.com/j-woodlee/ALCOASSR#readme",
   "dependencies": {
     "exceljs": "^1.9.1",
-    "pdfjs-dist": "^2.0.943"
+    "lodash": "^4.17.11",
+    "pdfjs-dist": "^2.0.943",
+    "webpack": "^3.0.0"
   },
   "devDependencies": {
     "pdf2json": "^1.1.8"
