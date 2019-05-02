@@ -19,7 +19,7 @@ workbook.xlsx.readFile(filePath)
         let apns = worksheet.getColumn(rawAPNCol).values.slice(0);  // save the apns in a a copy of the actual array
 
         apns.shift(); // remove the extra values in the beginning of the apn array
-        apns.shift();
+        // apns.shift();
 
         // console.log(apns);
 
@@ -41,8 +41,6 @@ workbook.xlsx.readFile(filePath)
             let subPN = apn[3];
 
             book = book.replace(/\s/g, ''); // remove all spaces
-
-
 
             if (book.length === 3) {
               book = "0" + book;
@@ -66,6 +64,8 @@ workbook.xlsx.readFile(filePath)
                console.log(usage());
                return; // don't write anything and get out of the script
         }
+
+        // apns.unshift();
 
         worksheet.getColumn(targetColIndex).values = apns; // assign the modified apns to the target column's array
 
