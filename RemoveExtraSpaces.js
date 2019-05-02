@@ -34,18 +34,12 @@ workbook.xlsx.readFile(filePath)
 
         }
 
-        if (worksheet.getColumn(targetColIndex).values.length !== 0) {  // before we write the data, make sure the column is empty
-               console.log("Error: Target column must be empty, try again with a different index.");
-               console.log(usage());
-               return; // don't write anything and get out of the script
-        }
-
-        worksheet.getColumn(targetColIndex).values = rawValues; // assign the modified apns to the target column's array
+        worksheet.getColumn(targetColumn).values = rawValues; // assign the modified apns to the target column's array
 
         return workbook.xlsx.writeFile(filePath);  // write to the file
     });
 
 
 let usage = () => {
-    return "Usage: excelparse.js <path to file> <name of worksheet> <index of raw apn column> <index of target column> <delimiter(coming soon)>"
+    return "Usage: RemoveExtraSpaces.js <path to file> <name of worksheet> <index of column with extra spaces> <index of target column>"
 }
