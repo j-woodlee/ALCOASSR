@@ -36,26 +36,26 @@ workbook.xlsx.readFile(filePath)
             let apn = apns[i].split(delimiter);
 
 
-            let book = apn[0];
-            let page = apn[1];
-            let parcel = apn[2];
+            let book = apn[0].replace(/\s/g, ''); // remove all spaces
+            let page = apn[1].replace(/\s/g, '');
+            let parcel = apn[2].replace(/\s/g, '');
             let subPN = apn[3];
 
-            book = book.replace(/\s/g, ''); // remove all spaces
 
             if (book.length === 3) {
-              book = "0" + book;
+              book = book + " ";
             }
 
             if (subPN == undefined) {
               subPN = "00";
+            } else {
+              subPN.replace(/\s/g, '');
             }
 
             // concatenate all 4 strings
-            apns[i] = book + " " + page + " " + parcel + " " + subPN;
+            apns[i] = book + page +  parcel + subPN.replace(/\s/g, '');
 
-
-            console.log(apns[i]);
+            // console.log(apns[i]);
         }
 
         // console.log(apns);
