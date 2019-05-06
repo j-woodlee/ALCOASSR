@@ -42,9 +42,9 @@ workbook.xlsx.readFile(filePath)
             let subPN = apn[3];
 
 
-            if (book.length === 3) {
+            if (book.length === 3 || book.length == 2) {
               book = book + " ";
-            }
+            } 
 
             if (subPN == undefined) {
               subPN = "00";
