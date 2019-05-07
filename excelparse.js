@@ -26,7 +26,7 @@ workbook.xlsx.readFile(filePath)
 
         for (let i = 0; i < apns.length; i++) {  // edit each string within the apn array
 
-          let regex1 = new RegExp("[0-9]*[a-zA-Z]{1}[0-9]*[a-zA-Z]{1}[0-9]*");
+            let regex1 = new RegExp("[0-9]*[a-zA-Z]{1}[0-9]*[a-zA-Z]{1}[0-9]*");
 
             if (regex1.test(apns[i])) {
                 console.log("regex terminate: " + apns[i]);
@@ -35,23 +35,17 @@ workbook.xlsx.readFile(filePath)
 
             let apn = apns[i].split(delimiter);
 
+            let book = apnArray[0] === undefined ? "" : apnArray[0].replace(/\s/g, ''); // remove all spaces
+            let page = apnArray[1] === undefined ? "" : apnArray[1].replace(/\s/g, '');
+            let parcel = apnArray[2] === undefined ? "" : apnArray[2].replace(/\s/g, '');
+            let subPN = apnArray[3] === undefined ? "00" : apnArray[3].replace(/\s/g, '');
 
-            let book = apn[0].replace(/\s/g, ''); // remove all spaces
-            let page = apn[1].replace(/\s/g, '');
-            let parcel = apn[2].replace(/\s/g, '');
-            let subPN = apn[3];
-
-
-            if (book.length === 3 || book.length == 2) {
-              book = book + " ";
-            }
-
-            if (subPN == undefined) {
-              subPN = "00";
+            if (book.length < 4) {
+                book = book + " ";
             }
 
             // concatenate all 4 strings
-            apns[i] = book + page +  parcel + subPN.replace(/\s/g, '');
+            apns[i] = book + page +  parcel + subPN;
 
             // console.log(apns[i]);
         }

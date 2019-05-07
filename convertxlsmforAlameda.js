@@ -1,16 +1,20 @@
 let Excel = require('exceljs');
 let workbook = new Excel.Workbook();
 
-let readPath = process.argv[2];
+let agency = process.argv[2];
+let year = process.argv[3];
 
-let worksheetName = process.argv[3];
+let readPath = "P:\\Permits List\\Upload Files\\Testing\\Alameda\\2018\\2018-10 Alameda Permits to write.xlsm";
 
-let delimiter = '-';
+let worksheetName = process.argv[4];
 
-let writePath = "P:\Permits List\\Upload Files\\Testing\\Alameda\\2018\\test1.xlsx";
+let delimiter = process.argv[5] ? process.argv[5] : '-';
 
+let writePath = "P:\\Permits List\\Upload Files\\Testing\\Alameda\\2018\\" + agency + "\\" + year + "\\test.xlsx";
 
-let apns = [], permitNums = [], issuedDates = [], permitTypes = [], valuations= [], owners= [], permitDistros = [];
+// 2018-10 Alameda Permits to write.xlsm and create 2018-10 Alameda Permits parcelized.xlsx
+
+let apns = [], permitNums = [], issuedDates = [], permitTypes = [], valuations= [], owners= [], permitDescs = [];
 
 workbook.xlsx.readFile(readPath)
     .then(() => {
@@ -18,7 +22,7 @@ workbook.xlsx.readFile(readPath)
         let worksheet = workbook.getWorksheet(worksheetName);
 
         let regex1 = new RegExp("[0-9]*[a-zA-Z]{1}[0-9]*[a-zA-Z]{1}[0-9]*");
-        let apn, permitNum, issuedDate, permitType, valuation, owner, permitDistro;
+        let apn, permitNum, issuedDate, permitType, valuation, owner, permitDesc;
         worksheet.eachRow((row, rowNumber) => {
              if (row.getCell('D').value !== null) {
                   apn = row.getCell('A').value;
@@ -27,30 +31,28 @@ workbook.xlsx.readFile(readPath)
                   permitType = row.getCell('D').value;
                   valuation = row.getCell('E').value;
                   owner = row.getCell('L').value;
-                  permitDistro = row.getCell('F').value;
+                  permitDesc = row.getCell('F').value;
 
                   // apn logic
                   if (!regex1.test(apn)) {
                      // console.log("regex does not terminate: " + apn);
                      let apnArray = apn.split(delimiter);
 
-                     let book = apnArray[0].replace(/\s/g, ''); // remove all spaces
-                     let page = apnArray[1].replace(/\s/g, '');
-                     let parcel = apnArray[2].replace(/\s/g, '');
-                     let subPN = apnArray[3];
 
-                     if (book.length === 3 || book.length == 2) {
-                               book = book + " ";
-                     }
+                     let book = apnArray[0] === undefined ? "" : apnArray[0].replace(/\s/g, ''); // remove all spaces
+                     let page = apnArray[1] === undefined ? "" : apnArray[1].replace(/\s/g, '');
+                     let parcel = apnArray[2] === undefined ? "" : apnArray[2].replace(/\s/g, '');
+                     let subPN = apnArray[3] === undefined ? "00" : apnArray[3].replace(/\s/g, '');
 
-                     if (subPN == undefined) {
-                               subPN = "00";
+                     if (book.length < 4) {
+                          book = book + " ";
                      }
                      // concatenate all 4 strings
-                     apn = book + page +  parcel + subPN.replace(/\s/g, '');
-
-
+                     apn = book + page +  parcel + subPN;
                   }
+
+                  // description logic
+
                   // console.log(apn);
                   apns.push(apn);
                   permitNums.push(permitNum);
@@ -58,10 +60,10 @@ workbook.xlsx.readFile(readPath)
                   permitTypes.push(permitType);
                   valuations.push(valuation);
                   owners.push(owner);
-                  permitDistros.push(permitDistro);
+                  permitDescs.push(permitDesc);
               }
               // console.log(apn + ", " + permitNum + ", " + issuedDate + ", " + permitType + ", " +
-              // valuation + ", " + owner + ", " + permitDistro);
+              // valuation + ", " + owner + ", " + permitDesc);
             });
 
             let writeBook = new Excel.Workbook();
@@ -78,13 +80,22 @@ workbook.xlsx.readFile(readPath)
             ]
 
             let sheet = writeBook.addWorksheet('Sheet 1');
+            sheet.columns = [
+            { header: 'Parcel Number', key: 'apn', width: 10 },  // A
+            { header: 'Permit Number', key: 'permitNum', width: 10 }, // B
+            { header: 'Issued Date', key: 'issueDate', width: 20 }, // C
+            { header: 'Permit Type', key: 'permiteType', width: 10 },  // D
+            { header: 'Valuation', key: 'valuation', width: 10 }, // E
+            { header: 'Owner', key: 'owner', width: 10 }, // F
+            { header: 'Permit Description', key: 'permitDesc', width: 10 } // G
+            ];
             sheet.getColumn('A').values = apns;
             sheet.getColumn('B').values = permitNums;
             sheet.getColumn('C').values = issuedDates;
             sheet.getColumn('D').values = permitTypes;
             sheet.getColumn('E').values = valuations;
             sheet.getColumn('F').values = owners;
-            sheet.getColumn('G').values = permitDistros;
+            sheet.getColumn('G').values = permitDescs;
 
             // console.log(apns);
             writeBook.xlsx.writeFile(writePath)
@@ -92,34 +103,6 @@ workbook.xlsx.readFile(readPath)
                     // done
                 });
    });
-
-    // CREATE NEW WORKBOOK FOR WRITING
-    // let writeBook = createAndFillWorkbook();
-    // workbook.xlsx.writeFile(writePath)
-    // .then(function() {
-    //     // done
-    // });
-
-
-// sheet.columns = [
-// { header: 'Parcel Number', key: 'apn', width: 10 },  // A
-// { header: 'Permit Number', key: 'permitNum', width: 10 }, // B
-// { header: 'Issued Date', key: 'issueDate', width: 10 }, // C
-// { header: 'Permit Type', key: 'permiteType', width: 10 },  // D
-// { header: 'Valuation', key: 'valuation', width: 10 }, // E
-// { header: 'Owner', key: 'owner', width: 10 }, // F
-// { header: 'Permit Distribution', key: 'permitDistro', width: 10 } // G
-// ];
-// for (let i = 0; i < apns.length; i++) {
-//   console.log(apns[i]);
-// }
-
-
-
-
-
-
-
 
 
 let usage = () => {
