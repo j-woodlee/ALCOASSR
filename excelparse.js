@@ -44,12 +44,10 @@ workbook.xlsx.readFile(filePath)
 
             if (book.length === 3 || book.length == 2) {
               book = book + " ";
-            } 
+            }
 
             if (subPN == undefined) {
               subPN = "00";
-            } else {
-              subPN.replace(/\s/g, '');
             }
 
             // concatenate all 4 strings
