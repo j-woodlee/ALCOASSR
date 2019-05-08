@@ -1,74 +1,60 @@
 let Excel = require('exceljs');
-let workbook = new Excel.Workbook();
 
-let agency = process.argv[2];
-let year = process.argv[3];
+let readAndCreate = (workbook, readPath, writePath, worksheetName) => {
+    let apns = [], permitNums = [], issuedDates = [], permitTypes = [], valuations= [], owners= [], permitDescs = [];
 
-let readPath = "P:\\Permits List\\Upload Files\\Testing\\Alameda\\2018\\2018-12 Alameda Permits to write.xlsm";
+    workbook.xlsx.readFile(readPath)
+        .then(() => {
 
-let worksheetName = process.argv[4];
+            let worksheet = workbook.getWorksheet(worksheetName);
 
-let delimiter = process.argv[5] ? process.argv[5] : '-';
+            let regex1 = new RegExp("[0-9]*[a-zA-Z]{1}[0-9]*[a-zA-Z]{1}[0-9]*");
+            let apn, permitNum, issuedDate, permitType, valuation, owner, permitDesc;
+            worksheet.eachRow((row, rowNumber) => {
+                 // if there is a permit type, add each value in the row to their array
+                 if (row.getCell('D').value !== null) {
+                      apn = row.getCell('A').value;
+                      permitNum = row.getCell('H').value;
+                      issuedDate = row.getCell('I').value;
+                      permitType = row.getCell('D').value;
+                      valuation = row.getCell('E').value;
+                      owner = row.getCell('L').value;
+                      permitDesc = row.getCell('F').value;
 
-let writePath = "P:\\Permits List\\Upload Files\\Testing\\Alameda\\2018\\2018-12 Alameda Permits parcelized.xlsx";
-
-// 2018-10 Alameda Permits to write.xlsm and create 2018-10 Alameda Permits parcelized.xlsx
-
-let apns = [], permitNums = [], issuedDates = [], permitTypes = [], valuations= [], owners= [], permitDescs = [];
-
-workbook.xlsx.readFile(readPath)
-    .then(() => {
-
-        let worksheet = workbook.getWorksheet(worksheetName);
-
-        let regex1 = new RegExp("[0-9]*[a-zA-Z]{1}[0-9]*[a-zA-Z]{1}[0-9]*");
-        let apn, permitNum, issuedDate, permitType, valuation, owner, permitDesc;
-        worksheet.eachRow((row, rowNumber) => {
-             if (row.getCell('D').value !== null) {
-                  apn = row.getCell('A').value;
-                  permitNum = row.getCell('H').value;
-                  issuedDate = row.getCell('I').value;
-                  permitType = row.getCell('D').value;
-                  valuation = row.getCell('E').value;
-                  owner = row.getCell('L').value;
-                  permitDesc = row.getCell('F').value;
-
-                  // apn logic
-                  if (!regex1.test(apn)) {
-                     // console.log("regex does not terminate: " + apn);
-                     let apnArray = apn.split(delimiter);
+                      // apn logic
+                      if (!regex1.test(apn)) {
+                         // console.log("regex does not terminate: " + apn);
+                         let apnArray = apn.split(delimiter);
 
 
-                     let book = apnArray[0] === undefined ? "" : apnArray[0].replace(/\s/g, ''); // remove all spaces
-                     let page = apnArray[1] === undefined ? "" : apnArray[1].replace(/\s/g, '');
-                     let parcel = apnArray[2] === undefined ? "" : apnArray[2].replace(/\s/g, '');
-                     let subPN = apnArray[3] === undefined ? "00" : apnArray[3].replace(/\s/g, '');
+                         let book = apnArray[0] === undefined ? "" : apnArray[0].replace(/\s/g, ''); // remove all spaces
+                         let page = apnArray[1] === undefined ? "" : apnArray[1].replace(/\s/g, '');
+                         let parcel = apnArray[2] === undefined ? "" : apnArray[2].replace(/\s/g, '');
+                         let subPN = apnArray[3] === undefined ? "00" : apnArray[3].replace(/\s/g, '');
 
-                     if (book.length < 4) {
-                          book = book + " ";
-                     }
-                     // concatenate all 4 strings
-                     apn = book + page +  parcel + subPN;
+                         if (book.length < 4) {
+                              book = book + " ";
+                         }
+                         // concatenate all 4 strings
+                         apn = book + page +  parcel + subPN;
+                      }
+
+
+                      // permit number logic
+                      permitNum = permitNum.substring(0,12); // truncate to 12 characters
+
+                      // description logic
+                      permitDesc = permitDesc.substring(0,250);
+
+                      // console.log(apn);
+                      apns.push(apn);
+                      permitNums.push(permitNum);
+                      issuedDates.push(issuedDate);
+                      permitTypes.push(permitType);
+                      valuations.push(valuation);
+                      owners.push(owner);
+                      permitDescs.push(permitDesc);
                   }
-
-
-                  // permit number logic
-                  permitNum = permitNum.substring(0,12); // truncate to 12 characters
-
-                  // description logic
-                  permitDesc = permitDesc.substring(0,250);
-
-                  // console.log(apn);
-                  apns.push(apn);
-                  permitNums.push(permitNum);
-                  issuedDates.push(issuedDate);
-                  permitTypes.push(permitType);
-                  valuations.push(valuation);
-                  owners.push(owner);
-                  permitDescs.push(permitDesc);
-              }
-              // console.log(apn + ", " + permitNum + ", " + issuedDate + ", " + permitType + ", " +
-              // valuation + ", " + owner + ", " + permitDesc);
             });
 
             let writeBook = new Excel.Workbook();
@@ -107,9 +93,7 @@ workbook.xlsx.readFile(readPath)
                 .then(function() {
                     // done
                 });
-   });
-
-
-let usage = () => {
-    return "Usage: excelparse.js <path to file> <name of worksheet> <index of raw apn column> <index of target column> <delimiter>"
+       });
 }
+
+module.exports.readAndCreate = readAndCreate;
