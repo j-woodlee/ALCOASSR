@@ -4,13 +4,13 @@ let workbook = new Excel.Workbook();
 let agency = process.argv[2];
 let year = process.argv[3];
 
-let readPath = "P:\\Permits List\\Upload Files\\Testing\\Alameda\\2018\\2018-10 Alameda Permits to write.xlsm";
+let readPath = "P:\\Permits List\\Upload Files\\Testing\\Alameda\\2018\\2018-12 Alameda Permits to write.xlsm";
 
 let worksheetName = process.argv[4];
 
 let delimiter = process.argv[5] ? process.argv[5] : '-';
 
-let writePath = "P:\\Permits List\\Upload Files\\Testing\\Alameda\\2018\\" + agency + "\\" + year + "\\test.xlsx";
+let writePath = "P:\\Permits List\\Upload Files\\Testing\\Alameda\\2018\\2018-12 Alameda Permits parcelized.xlsx";
 
 // 2018-10 Alameda Permits to write.xlsm and create 2018-10 Alameda Permits parcelized.xlsx
 
@@ -51,7 +51,12 @@ workbook.xlsx.readFile(readPath)
                      apn = book + page +  parcel + subPN;
                   }
 
+
+                  // permit number logic
+                  permitNum = permitNum.substring(0,12); // truncate to 12 characters
+
                   // description logic
+                  permitDesc = permitDesc.substring(0,250);
 
                   // console.log(apn);
                   apns.push(apn);
