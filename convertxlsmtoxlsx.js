@@ -6,15 +6,17 @@ let workbook = new Excel.Workbook();
 
 let agency = process.argv[2];
 let year = process.argv[3];
-let fileName = process.argv[4];
+let month = process.argv[4];
 
-let readPath = "P:\\Permits List\\Upload Files\\Testing\\" + agency + "\\" + year + "\\" + fileName + " to write.xlsm";
+let readPath = "P:\\Permits List\\Upload Files\\Testing\\" + agency + "\\" + year + "\\"
++ year + "-" + month + " " + agency + " Permits" + " to write.xlsm";
 
-let worksheetName = process.argv[5];
+let worksheetName = year + "-" + month + " " + agency.substring(0,3).toUpperCase() + " Issued";
 
 let delimiter = process.argv[6] ? process.argv[6] : '-';
 
-let writePath = "P:\\Permits List\\Upload Files\\Testing\\" + agency + "\\" + year + "\\" + fileName + " parcelized.xlsx";
+let writePath = "P:\\Permits List\\Upload Files\\Testing\\" + agency + "\\" + year + "\\"
++ year + "-" + month + " " + agency + " Permits" + " parcelized.xlsx";
 
 switch(agency) {
   case "Alameda":
