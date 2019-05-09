@@ -8,17 +8,17 @@ let agency = process.argv[2];
 let year = process.argv[3];
 let fileName = process.argv[4];
 
-let readPath = "P:\\Permits List\\Upload Files\\Testing\\" + agency + "\\" + year + "\\" + fileName + ".xlsm";
+let readPath = "P:\\Permits List\\Upload Files\\Testing\\" + agency + "\\" + year + "\\" + fileName + " to write.xlsm";
 
 let worksheetName = process.argv[5];
 
 let delimiter = process.argv[6] ? process.argv[6] : '-';
 
-let writePath = "P:\\Permits List\\Upload Files\\Testing\\" + agency + "\\" + year + "\\" + fileName + ".xlsx";
+let writePath = "P:\\Permits List\\Upload Files\\Testing\\" + agency + "\\" + year + "\\" + fileName + " parcelized.xlsx";
 
 switch(agency) {
   case "Alameda":
-    Alameda.readAndCreate(workbook, readPath, writePath, worksheetName);
+    Alameda.readAndCreate(workbook, readPath, writePath, worksheetName, delimiter);
     break;
   case "Albany":
     Albany.readAndCreate(workbook, readPath, writePath, worksheetName);
