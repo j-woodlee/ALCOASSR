@@ -13,7 +13,6 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName) => {
               // identify headers
               let headers = worksheet.getRow(1);
               headers.eachCell((cell, colNumber) => {
-                  console.log('Cell ' + colNumber + ' = ' + cell.value);
                   switch(cell.value) {
                     case "Parcel Number":
                       apnIndex = colNumber;
