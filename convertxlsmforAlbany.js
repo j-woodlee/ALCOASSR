@@ -1,14 +1,10 @@
 let Excel = require('exceljs');
 
-let workbook = new Excel.Workbook();
-
-
-
 let readAndCreate = (workbook, readPath, writePath, worksheetName) => {
-      let apns = [], permitNums = [], issuedDates = [], permitTypes = [], valuations= [], owners= [], permitDescs = [];
+    let apns = [], permitNums = [], issuedDates = [], permitTypes = [], valuations= [], owners= [], permitDescs = [];
 
-      workbook.xlsx.readFile(readPath)
-          .then(() => {
+    workbook.xlsx.readFile(readPath)
+        .then(() => {
               let apnIndex, permitNumIndex, issuedDateIndex, permitTypeIndex, valuationIndex, ownerIndex, permitDescIndex;
 
               let worksheet = workbook.getWorksheet(worksheetName);
