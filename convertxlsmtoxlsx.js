@@ -13,18 +13,18 @@ let readPath = "P:\\Permits List\\Upload Files\\Testing\\" + agency + "\\" + yea
 
 let worksheetName = year + "-" + month + " " + agency.substring(0,3).toUpperCase() + " Issued";
 
-let delimiter = process.argv[6] ? process.argv[6] : '-';
+let delimiter = process.argv[6] ? process.argv[6] : "-";
 
 let writePath = "P:\\Permits List\\Upload Files\\Testing\\" + agency + "\\" + year + "\\"
 + year + "-" + month + " " + agency + " Permits" + " parcelized.xlsx";
 
 switch(agency) {
-  case "Alameda":
+case "Alameda":
     Alameda.readAndCreate(workbook, readPath, writePath, worksheetName, delimiter);
     break;
-  case "Albany":
+case "Albany":
     Albany.readAndCreate(workbook, readPath, writePath, worksheetName);
     break;
-  default:
+default:
     break;
 }
