@@ -9,7 +9,7 @@ let year = process.argv[3];
 let month = process.argv[4];
 
 let readPath = "P:\\Permits List\\Upload Files\\Testing\\" + agency + "\\" + year + "\\"
-+ year + "-" + month + " " + agency + " Permits" + " to write.xlsm";
++ year + "-" + month + " " + agency + " Permits to write.xlsm";
 
 let worksheetName = year + "-" + month + " " + agency.substring(0,3).toUpperCase() + " Issued";
 

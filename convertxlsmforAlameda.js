@@ -28,7 +28,6 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
                         // console.log("regex does not terminate: " + apn);
                         let apnArray = apn.split(delimiter);
 
-
                         let book = apnArray[0] === undefined ? "" : apnArray[0].replace(/\s/g, ""); // remove all spaces
                         let page = apnArray[1] === undefined ? "" : apnArray[1].replace(/\s/g, "");
                         let parcel = apnArray[2] === undefined ? "" : apnArray[2].replace(/\s/g, "");
