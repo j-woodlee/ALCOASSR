@@ -23,7 +23,7 @@ Those are the only things you need to download.
 
 Open Powershell and navigate to a directory of your choice where you can store code (use the \"cd\" command to change directories).
 
-Then clone this repo by running the command:  \"git clone https://github.com/j-woodlee/ALCOASSR.git\"
+Then clone this repo by running the command:  \"git clone https://github.com/j-woodlee/ALCOASSR.git"
 
 Now that the repository is on your computer it is super easy to grab updates from the server I'm storing this
 on.  Move into the repository by running \"cd ALCOASSR\"
