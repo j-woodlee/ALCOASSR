@@ -88,12 +88,12 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName) => {
             let sheet = writeBook.addWorksheet("Sheet 1");
             sheet.columns = [
                 { header: "Parcel Number", key: "apn", width: 20 },  // A
-                { header: "Permit Number", key: "permitNum", width: 10 }, // B
+                { header: "Permit Number", key: "permitNum", width: 20 }, // B
                 { header: "Issued Date", key: "issueDate", width: 20 }, // C
-                { header: "Permit Type", key: "permiteType", width: 10 },  // D
-                { header: "Valuation", key: "valuation", width: 10 }, // E
-                { header: "Owner", key: "owner", width: 10 }, // F
-                { header: "Permit Description", key: "permitDesc", width: 10 } // G
+                { header: "Permit Type", key: "permiteType", width: 20 },  // D
+                { header: "Valuation", key: "valuation", width: 20 }, // E
+                { header: "Owner", key: "owner", width: 20 }, // F
+                { header: "Permit Description", key: "permitDesc", width: 20 } // G
             ];
             sheet.getColumn("A").values = apns;
             sheet.getColumn("B").values = permitNums;
