@@ -30,4 +30,4 @@ on.  Move into the repository by running \"cd ALCOASSR\"
 
 You can now simply run the script by typing: \"node ./convertxlsmtoxlsx.js Alameda 2018 10\" (or insert whatever parameters you want)
 
-This script will make a new file in the P drive (in the test repository) depending on parameters.
+This script will make the new parcelized file in the P drive (in the test repository for now) depending on parameters.
