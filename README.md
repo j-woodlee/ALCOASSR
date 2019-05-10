@@ -7,7 +7,7 @@ Basic structure:
   node ./convertxlsmtoxlsx.js \<agency\> \<year\> \<month\>
 
 
-## Development Environment
+## Development Environment / Installation
 
 First, install Git.  Git is a command line utility developed by Linus Torvalds (creator of Linux)
 to manage code repositories.  The download for windows can be found here: https://gitforwindows.org/.
