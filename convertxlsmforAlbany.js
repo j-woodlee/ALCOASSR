@@ -1,47 +1,16 @@
 let Excel = require("exceljs");
 
 let readAndCreate = (workbook, readPath, writePath, worksheetName) => {
-    let apns = [], permitNums = [], issuedDates = [], permitTypes = [], valuations= [], owners= [], permitDescs = [];
+    let apns = [], permitNums = [], issuedDates = [], permitTypes = [], valuations= [], applicantNames= [], permitDescs = [];
 
     workbook.xlsx.readFile(readPath)
         .then(() => {
-            let apnIndex, permitNumIndex, issuedDateIndex, permitTypeIndex, valuationIndex, ownerIndex, permitDescIndex;
+            let apnIndex = "A", permitNumIndex = "H", issuedDateIndex = "I", permitTypeIndex = "D",
+                valuationIndex = "E", applicantNameIndex = "J", permitDescIndex = "F";
 
             let worksheet = workbook.getWorksheet(worksheetName);
 
-            // Iterate over all non-null cells in a row
-            // identify headers
-            let headers = worksheet.getRow(1);
-            headers.eachCell((cell, colNumber) => {
-                switch(cell.value) {
-                case "Parcel Number":
-                    apnIndex = colNumber;
-                    break;
-                case "Permit #":
-                    permitNumIndex = colNumber;
-                    break;
-                case "Issued\r\nDate ":
-                    issuedDateIndex = colNumber;
-                    break;
-                case "Permit Type":
-                    permitTypeIndex = colNumber;
-                    break;
-                case "Valuation":
-                    valuationIndex = colNumber;
-                    break;
-                case "Applicant Name":
-                    ownerIndex = colNumber;
-                    break;
-                case "Permit Desciription":
-                    permitDescIndex = colNumber;
-                    break;
-                default:
-                    break;
-                }
-            });
-
-            let apn, permitNum, issuedDate, permitType, valuation, owner, permitDesc;
-            // console.log(apnIndex + " " + permitNumIndex + " " + issuedDateIndex);
+            let apn, permitNum, issuedDate, permitType, valuation, applicantName, permitDesc;
             worksheet.eachRow((row) => {
 
                 if (row.getCell("D").value !== null) {
@@ -50,7 +19,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName) => {
                     issuedDate = row.getCell(issuedDateIndex).value;
                     permitType = row.getCell(permitTypeIndex).value;
                     valuation = row.getCell(valuationIndex).value;
-                    owner = row.getCell(ownerIndex).value;
+                    applicantName = row.getCell(applicantNameIndex).value;
                     permitDesc = row.getCell(permitDescIndex).value;
 
                     // permit number logic
@@ -58,17 +27,15 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName) => {
 
                     // description logic
                     permitDesc = permitDesc.substring(0,250);
-                    // console.log(apn);
+
                     apns.push(apn);
                     permitNums.push(permitNum);
                     issuedDates.push(issuedDate);
                     permitTypes.push(permitType);
                     valuations.push(valuation);
-                    owners.push(owner);
+                    applicantNames.push(applicantName);
                     permitDescs.push(permitDesc);
                 }
-                // console.log(apn + ", " + permitNum + ", " + issuedDate + ", " + permitType + ", " +
-                // valuation + ", " + owner + ", " + permitDesc);
             });
 
 
@@ -90,9 +57,9 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName) => {
                 { header: "Parcel Number", key: "apn", width: 20 },  // A
                 { header: "Permit Number", key: "permitNum", width: 20 }, // B
                 { header: "Issued Date", key: "issueDate", width: 20 }, // C
-                { header: "Permit Type", key: "permiteType", width: 20 },  // D
+                { header: "Permit Type", key: "permitType", width: 20 },  // D
                 { header: "Valuation", key: "valuation", width: 20 }, // E
-                { header: "Owner", key: "owner", width: 20 }, // F
+                { header: "Applicant Name", key: "applicantName", width: 20 }, // F
                 { header: "Permit Description", key: "permitDesc", width: 20 } // G
             ];
             sheet.getColumn("A").values = apns;
@@ -100,7 +67,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName) => {
             sheet.getColumn("C").values = issuedDates;
             sheet.getColumn("D").values = permitTypes;
             sheet.getColumn("E").values = valuations;
-            sheet.getColumn("F").values = owners;
+            sheet.getColumn("F").values = applicantNames;
             sheet.getColumn("G").values = permitDescs;
 
             // console.log(apns);

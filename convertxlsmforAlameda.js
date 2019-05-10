@@ -1,7 +1,9 @@
 let Excel = require("exceljs");
 
 let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) => {
-    let apns = [], permitNums = [], issuedDates = [], permitTypes = [], valuations= [], owners= [], permitDescs = [];
+    let apns = [], permitNums = [], issuedDates = [], permitTypes = [], valuations= [], applicantNames= [], permitDescs = [];
+    let apnIndex = "A", permitNumIndex = "H", issuedDateIndex = "I", permitTypeIndex = "D",
+        valuationIndex = "E", applicantNameIndex = "L", permitDescIndex = "F";
 
     workbook.xlsx.readFile(readPath)
         .then(() => {
@@ -9,17 +11,17 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
             let worksheet = workbook.getWorksheet(worksheetName);
 
             let regex1 = new RegExp("[0-9]*[a-zA-Z]{1}[0-9]*[a-zA-Z]{1}[0-9]*");
-            let apn, permitNum, issuedDate, permitType, valuation, owner, permitDesc;
+            let apn, permitNum, issuedDate, permitType, valuation, applicantName, permitDesc;
             worksheet.eachRow((row) => {
                 // if there is a permit type, add each value in the row to their array
-                if (row.getCell("D").value !== null) {
-                    apn = row.getCell("A").value;
-                    permitNum = row.getCell("H").value;
-                    issuedDate = row.getCell("I").value;
-                    permitType = row.getCell("D").value;
-                    valuation = row.getCell("E").value;
-                    owner = row.getCell("L").value;
-                    permitDesc = row.getCell("F").value;
+                if (row.getCell(permitTypeIndex).value !== null) {
+                    apn = row.getCell(apnIndex).value;
+                    permitNum = row.getCell(permitNumIndex).value;
+                    issuedDate = row.getCell(issuedDateIndex).value;
+                    permitType = row.getCell(permitTypeIndex).value;
+                    valuation = row.getCell(valuationIndex).value;
+                    applicantName = row.getCell(applicantNameIndex).value;
+                    permitDesc = row.getCell(permitDescIndex).value;
 
                     // apn logic
                     if (!regex1.test(apn)) {
@@ -39,7 +41,6 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
                         apn = book + page +  parcel + subPN;
                     }
 
-
                     // permit number logic
                     permitNum = permitNum.substring(0,12); // truncate to 12 characters
 
@@ -52,7 +53,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
                     issuedDates.push(issuedDate);
                     permitTypes.push(permitType);
                     valuations.push(valuation);
-                    owners.push(owner);
+                    applicantNames.push(applicantName);
                     permitDescs.push(permitDesc);
                 }
             });
@@ -75,9 +76,9 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
                 { header: "Parcel Number", key: "apn", width: 20 },  // A
                 { header: "Permit Number", key: "permitNum", width: 20 }, // B
                 { header: "Issued Date", key: "issueDate", width: 20 }, // C
-                { header: "Permit Type", key: "permiteType", width: 20 },  // D
+                { header: "Permit Type", key: "permitType", width: 20 },  // D
                 { header: "Valuation", key: "valuation", width: 20 }, // E
-                { header: "Owner", key: "owner", width: 20 }, // F
+                { header: "Applicant Name", key: "applicantName", width: 20 }, // F
                 { header: "Permit Description", key: "permitDesc", width: 20 } // G
             ];
             sheet.getColumn("A").values = apns;
@@ -85,7 +86,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
             sheet.getColumn("C").values = issuedDates;
             sheet.getColumn("D").values = permitTypes;
             sheet.getColumn("E").values = valuations;
-            sheet.getColumn("F").values = owners;
+            sheet.getColumn("F").values = applicantNames;
             sheet.getColumn("G").values = permitDescs;
 
             // console.log(apns);
