@@ -1,7 +1,14 @@
 # ALCOASSR
 Projects for Alameda County Assessor
 
-## Excelparse.js Documentation
+## Convert XLSM to XLSX Documentation
 
 Basic structure:
-  node ./excelparse.js \<path to excel file\>
+  node ./convertxlsmtoxlsx.js <agency> <year> <month>
+
+
+## Development Environment
+
+This runs on Node.js, so you will need node installed on this computer.
+
+Clone the repo and install dependencies then you can run the script from the command line.
