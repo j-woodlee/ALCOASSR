@@ -25,8 +25,7 @@ Open Powershell and navigate to a directory of your choice where you can store c
 
 Then clone this repo by running the command:  \"git clone https://github.com/j-woodlee/ALCOASSR.git"
 
-Now that the repository is on your computer it is super easy to grab updates from the server I'm storing this
-on.  Move into the repository by running \"cd ALCOASSR\"
+Move into the repository by running \"cd ALCOASSR\"
 
 You can now simply run the script by typing: \"node ./convertxlsmtoxlsx.js Alameda 2018 10\" (or insert whatever parameters you want)
 
@@ -42,10 +41,10 @@ structured the same way so fortunately there can be a lot of code reuse, and the
 First the "to write.xlsm" file is read.  The only rows we are interested in are those with a present permit type, so that's the first filter.
 
 The script loops through every row in the .xlsm file, but ignores the ones that have a null permit type.  When a row is found that has a non-null
-permit type, a couple things happen.  First, each piece of relevant data in the row is captured in variables, the APN is captured in a variable named apn,
+permit type, a couple things happen.  
+
+First, each piece of relevant data in the row is captured in variables, the APN is captured in a variable named apn,
 permit description is captured in permitDesc, etc.  Then any kind of necessary modification to those variables happens.  For example, for the permit
-description I have to truncate to 250 characters, for the permit number I have to truncate to 12 characters etc.  Then once I have all the data appropriately
-stored in these variables, I push them onto an array that represents the column they will be in.  This means I have an array for each column in the final
-output program.  So for example, I push the apn variable onto the array storing all the APNs, I push permitDesc onto the array that is storing the permit
-descriptions, etc.  As I loop through the rows of the .xlsm file I am building these arrays.  When I finish looping though all the rows, my arrays will be
-completely full.  I can easily use these arrays to build an excel document as long as I have the proper syntax for exceljs.  
+description I have to truncate to 250 characters, for the permit number I have to truncate to 12 characters etc.  
+
+Then once I have all the data appropriately stored in these variables, I push them onto an array that represents the column they will be in.  This means I have an array for each column in the final output program.  So for example, I push the apn variable onto the array storing all the APNs, I push permitDesc onto the array that is storing the permit descriptions, etc.  As I loop through the rows of the .xlsm file I am building these arrays.  When I finish looping though all the rows, my arrays will be completely full.  I can easily use these arrays to build an excel document as long as I have the proper syntax for exceljs.  
