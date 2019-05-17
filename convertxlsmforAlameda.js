@@ -1,6 +1,8 @@
 let Excel = require("exceljs");
 
 let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) => {
+    console.log("Reading from: " + "\"" + readPath + "\"");
+
     let apns = [], permitNums = [], issuedDates = [], permitTypes = [], valuations= [], applicantNames= [], permitDescs = [];
     let apnIndex = "A", permitNumIndex = "H", issuedDateIndex = "I", permitTypeIndex = "D",
         valuationIndex = "E", applicantNameIndex = "L", permitDescIndex = "F";
@@ -88,7 +90,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
             sheet.getColumn("F").values = applicantNames;
             sheet.getColumn("G").values = permitDescs;
 
-            // console.log(apns);
+            console.log("Writing to: " + "\"" + writePath + "\"");
             writeBook.xlsx.writeFile(writePath)
                 .then(function() {
                     // done

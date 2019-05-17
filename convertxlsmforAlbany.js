@@ -1,15 +1,15 @@
 let Excel = require("exceljs");
 
 let readAndCreate = (workbook, readPath, writePath, worksheetName) => {
-    // eslint-disable-next-line no-console
     console.log("Reading from: " + "\"" + readPath + "\"");
 
     let apns = [], permitNums = [], issuedDates = [], permitTypes = [], valuations= [], applicantNames= [], permitDescs = [];
-
+    let apnIndex = "A", permitNumIndex = "H", issuedDateIndex = "I", permitTypeIndex = "D",
+        valuationIndex = "E", applicantNameIndex = "J", permitDescIndex = "F";
+        
     workbook.xlsx.readFile(readPath)
         .then(() => {
-            let apnIndex = "A", permitNumIndex = "H", issuedDateIndex = "I", permitTypeIndex = "D",
-                valuationIndex = "E", applicantNameIndex = "J", permitDescIndex = "F";
+
 
             let worksheet = workbook.getWorksheet(worksheetName);
 
@@ -73,7 +73,6 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName) => {
             sheet.getColumn("F").values = applicantNames;
             sheet.getColumn("G").values = permitDescs;
 
-            // eslint-disable-next-line no-console
             console.log("Writing to: " + "\"" + writePath + "\"");
             writeBook.xlsx.writeFile(writePath)
                 .then(function() {
