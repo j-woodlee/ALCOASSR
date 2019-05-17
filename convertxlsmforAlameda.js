@@ -44,7 +44,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
                     permitNum = permitNum.substring(0,12); // truncate to 12 characters
 
                     // description logic
-                    permitDesc = permitDesc.substring(0,250);
+                    permitDesc = "(" + permitNum + ") " + permitDesc.substring(0,250);
 
                     // console.log(apn);
                     apns.push(apn);
