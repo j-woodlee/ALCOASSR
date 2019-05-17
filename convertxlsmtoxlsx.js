@@ -25,6 +25,11 @@ case "Alameda":
 case "Albany":
     Albany.readAndCreate(workbook, readPath, writePath, worksheetName);
     break;
+case "Berkeley":
+    Albany.readAndCreate(workbook, readPath, writePath, worksheetName);
+    break;
 default:
     break;
 }
+
+// P:\Permits List\Files Received From Unit Supervisors\<Agency>\2019

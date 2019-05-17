@@ -1,6 +1,7 @@
 let Excel = require("exceljs");
 
 let readAndCreate = (workbook, readPath, writePath, worksheetName) => {
+  console.log("running Albany at " + readPath);
     let apns = [], permitNums = [], issuedDates = [], permitTypes = [], valuations= [], applicantNames= [], permitDescs = [];
 
     workbook.xlsx.readFile(readPath)
