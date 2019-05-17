@@ -6,7 +6,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName) => {
     let apns = [], permitNums = [], issuedDates = [], permitTypes = [], valuations= [], applicantNames= [], permitDescs = [];
     let apnIndex = "A", permitNumIndex = "H", issuedDateIndex = "I", permitTypeIndex = "D",
         valuationIndex = "E", applicantNameIndex = "J", permitDescIndex = "F";
-        
+
     workbook.xlsx.readFile(readPath)
         .then(() => {
 

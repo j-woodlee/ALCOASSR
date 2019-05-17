@@ -28,6 +28,12 @@ case "Albany":
 case "Berkeley":
     Albany.readAndCreate(workbook, readPath, writePath, worksheetName);
     break;
+case "Emeryville":
+    Albany.readAndCreate(workbook, readPath, writePath, worksheetName);
+    break;
+case "Livermore":
+    Albany.readAndCreate(workbook, readPath, writePath, worksheetName);
+    break;
 default:
     break;
 }
