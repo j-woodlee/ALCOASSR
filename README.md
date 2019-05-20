@@ -4,7 +4,7 @@ Projects for Alameda County Assessor
 ## Convert XLSM to XLSX Documentation
 
 Basic structure:
-  node ./convertxlsmtoxlsx.js \<agency\> \<year\> \<month\>
+  node ./convertXLSMtoXLSX.js \<agency\> \<year\> \<month\>
 
 
 ## Development Environment / Installation
@@ -27,14 +27,14 @@ Then clone this repo by running the command:  \"git clone https://github.com/j-w
 
 Move into the repository by running \"cd ALCOASSR\"
 
-You can now simply run the script by typing: \"node ./convertxlsmtoxlsx.js Alameda 2018 10\" (or insert whatever parameters you want)
+You can now simply run the script by typing: \"node ./convertXLSMtoXLSX.js Alameda 2018 10\" (or insert whatever parameters you want)
 
 This script will make the new parcelized file in the P drive (in the test directory for now) depending on parameters.
 
 
 ## Script Logic
 
-There is one master file (convertxlsmtoxlsx.js) that reads the parameters and matches them with the appropriate settings
+There is one master file (convertXLSMtoXLSX.js) that reads the parameters and matches them with the appropriate settings
 of the agency.  Meaning the program is run differently when Alameda is entered versus Albany.  Many agencies have files that are
 structured the same way so fortunately there can be a lot of code reuse, and the program will run the same when Fremont and Alameda are entered for example (except for the paths of course).  
 
