@@ -19,12 +19,13 @@
  * @licend The above is the entire license notice for the
  * Javascript code in this page
  */
-'use strict';
+"use strict";
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 {
   var isURLSupported = false;
+
   try {
     if (typeof URL === 'function' && _typeof(URL.prototype) === 'object' && 'origin' in URL.prototype) {
       var u = new URL('b', 'http://a');
@@ -32,19 +33,24 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       isURLSupported = u.href === 'http://a/c%20d';
     }
   } catch (ex) {}
+
   if (isURLSupported) {
     exports.URL = URL;
   } else {
     var PolyfillURL = require('../../external/url/url-lib').URL;
+
     var OriginalURL = require('./global_scope').URL;
+
     if (OriginalURL) {
       PolyfillURL.createObjectURL = function (blob) {
         return OriginalURL.createObjectURL.apply(OriginalURL, arguments);
       };
+
       PolyfillURL.revokeObjectURL = function (url) {
         OriginalURL.revokeObjectURL(url);
       };
     }
+
     exports.URL = PolyfillURL;
   }
 }

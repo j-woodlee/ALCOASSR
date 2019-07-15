@@ -19,15 +19,15 @@
  * @licend The above is the entire license notice for the
  * Javascript code in this page
  */
-'use strict';
+"use strict";
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _util = require("../../shared/util");
 
-var _util = require('../../shared/util');
+var _api = require("../../display/api");
 
-var _api = require('../../display/api');
+var _message_handler = require("../../shared/message_handler");
 
-var _message_handler = require('../../shared/message_handler');
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 describe('message_handler', function () {
   function sleep(ticks) {
@@ -35,12 +35,13 @@ describe('message_handler', function () {
       return ticks && sleep(ticks - 1);
     });
   }
+
   describe('sendWithStream', function () {
     it('should return a ReadableStream', function () {
       var port = new _api.LoopbackPort();
       var messageHandler1 = new _message_handler.MessageHandler('main', 'worker', port);
       var readable = messageHandler1.sendWithStream('fakeHandler');
-      expect(typeof readable === 'undefined' ? 'undefined' : _typeof(readable)).toEqual('object');
+      expect(_typeof(readable)).toEqual('object');
       expect(_typeof(readable.getReader)).toEqual('function');
     });
     it('should read using a reader', function (done) {
@@ -52,9 +53,11 @@ describe('message_handler', function () {
         sink.onPull = function () {
           log += 'p';
         };
+
         sink.onCancel = function (reason) {
           log += 'c';
         };
+
         sink.ready.then(function () {
           sink.enqueue('hi');
           return sink.ready;
@@ -94,9 +97,11 @@ describe('message_handler', function () {
         sink.onPull = function () {
           log += 'p';
         };
+
         sink.onCancel = function (reason) {
           log += 'c';
         };
+
         log += '0';
         sink.ready.then(function () {
           log += '1';
@@ -144,9 +149,11 @@ describe('message_handler', function () {
         sink.onPull = function () {
           log += 'p';
         };
+
         sink.onCancel = function (reason) {
           log += 'c';
         };
+
         sink.ready.then(function () {
           sink.enqueue([1, 2, 3, 4], 4);
           return sink.ready;
@@ -183,9 +190,11 @@ describe('message_handler', function () {
         sink.onPull = function () {
           log += 'p';
         };
+
         sink.onCancel = function (reason) {
           log += 'c';
         };
+
         log += '0';
         sink.ready.then(function () {
           log += '1';
@@ -238,9 +247,11 @@ describe('message_handler', function () {
         sink.onPull = function () {
           log += 'p';
         };
+
         sink.onCancel = function (reason) {
           log += 'c';
         };
+
         log += '0';
         sink.ready.then(function () {
           log += '1';
@@ -295,9 +306,11 @@ describe('message_handler', function () {
         sink.onPull = function () {
           log += 'p';
         };
+
         sink.onCancel = function (reason) {
           log += 'c';
         };
+
         log += '0';
         sink.ready.then(function () {
           log += '1';

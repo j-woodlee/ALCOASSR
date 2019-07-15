@@ -19,24 +19,28 @@
  * @licend The above is the entire license notice for the
  * Javascript code in this page
  */
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PDFFindBar = undefined;
+exports.PDFFindBar = void 0;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _ui_utils = require("./ui_utils");
 
-var _ui_utils = require('./ui_utils');
-
-var _pdf_find_controller = require('./pdf_find_controller');
+var _pdf_find_controller = require("./pdf_find_controller");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 var MATCHES_COUNT_LIMIT = 1000;
 
-var PDFFindBar = function () {
+var PDFFindBar =
+/*#__PURE__*/
+function () {
   function PDFFindBar(options) {
     var _this = this;
 
@@ -70,9 +74,12 @@ var PDFFindBar = function () {
           if (e.target === _this.findField) {
             _this.dispatchEvent('again', e.shiftKey);
           }
+
           break;
+
         case 27:
           _this.close();
+
           break;
       }
     });
@@ -95,12 +102,12 @@ var PDFFindBar = function () {
   }
 
   _createClass(PDFFindBar, [{
-    key: 'reset',
+    key: "reset",
     value: function reset() {
       this.updateUIState();
     }
   }, {
-    key: 'dispatchEvent',
+    key: "dispatchEvent",
     value: function dispatchEvent(type, findPrev) {
       this.eventBus.dispatch('find', {
         source: this,
@@ -114,58 +121,69 @@ var PDFFindBar = function () {
       });
     }
   }, {
-    key: 'updateUIState',
+    key: "updateUIState",
     value: function updateUIState(state, previous, matchesCount) {
       var _this2 = this;
 
       var notFound = false;
       var findMsg = '';
       var status = '';
+
       switch (state) {
         case _pdf_find_controller.FindState.FOUND:
           break;
+
         case _pdf_find_controller.FindState.PENDING:
           status = 'pending';
           break;
+
         case _pdf_find_controller.FindState.NOT_FOUND:
           findMsg = this.l10n.get('find_not_found', null, 'Phrase not found');
           notFound = true;
           break;
+
         case _pdf_find_controller.FindState.WRAPPED:
           if (previous) {
             findMsg = this.l10n.get('find_reached_top', null, 'Reached top of document, continued from bottom');
           } else {
             findMsg = this.l10n.get('find_reached_bottom', null, 'Reached end of document, continued from top');
           }
+
           break;
       }
+
       this.findField.classList.toggle('notFound', notFound);
       this.findField.setAttribute('data-status', status);
       Promise.resolve(findMsg).then(function (msg) {
         _this2.findMsg.textContent = msg;
+
         _this2._adjustWidth();
       });
       this.updateResultsCount(matchesCount);
     }
   }, {
-    key: 'updateResultsCount',
+    key: "updateResultsCount",
     value: function updateResultsCount() {
       var _this3 = this;
 
       var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           _ref$current = _ref.current,
-          current = _ref$current === undefined ? 0 : _ref$current,
+          current = _ref$current === void 0 ? 0 : _ref$current,
           _ref$total = _ref.total,
-          total = _ref$total === undefined ? 0 : _ref$total;
+          total = _ref$total === void 0 ? 0 : _ref$total;
 
       if (!this.findResultsCount) {
         return;
       }
+
       var matchesCountMsg = '',
           limit = MATCHES_COUNT_LIMIT;
+
       if (total > 0) {
         if (total > limit) {
-          matchesCountMsg = this.l10n.get('find_match_count_limit', { limit: limit }, 'More than {{limit}} match' + (limit !== 1 ? 'es' : ''));
+          matchesCountMsg = this.l10n.get('find_match_count_limit', {
+            limit: limit
+          }, 'More than {{limit}} match' + (limit !== 1 ? 'es' : ''));
         } else {
           matchesCountMsg = this.l10n.get('find_match_count', {
             current: current,
@@ -173,37 +191,45 @@ var PDFFindBar = function () {
           }, '{{current}} of {{total}} match' + (total !== 1 ? 'es' : ''));
         }
       }
+
       Promise.resolve(matchesCountMsg).then(function (msg) {
         _this3.findResultsCount.textContent = msg;
-        _this3.findResultsCount.classList[!total ? 'add' : 'remove']('hidden');
+
+        _this3.findResultsCount.classList.toggle('hidden', !total);
+
         _this3._adjustWidth();
       });
     }
   }, {
-    key: 'open',
+    key: "open",
     value: function open() {
       if (!this.opened) {
         this.opened = true;
         this.toggleButton.classList.add('toggled');
         this.bar.classList.remove('hidden');
       }
+
       this.findField.select();
       this.findField.focus();
+
       this._adjustWidth();
     }
   }, {
-    key: 'close',
+    key: "close",
     value: function close() {
       if (!this.opened) {
         return;
       }
+
       this.opened = false;
       this.toggleButton.classList.remove('toggled');
       this.bar.classList.add('hidden');
-      this.eventBus.dispatch('findbarclose', { source: this });
+      this.eventBus.dispatch('findbarclose', {
+        source: this
+      });
     }
   }, {
-    key: 'toggle',
+    key: "toggle",
     value: function toggle() {
       if (this.opened) {
         this.close();
@@ -212,14 +238,16 @@ var PDFFindBar = function () {
       }
     }
   }, {
-    key: '_adjustWidth',
+    key: "_adjustWidth",
     value: function _adjustWidth() {
       if (!this.opened) {
         return;
       }
+
       this.bar.classList.remove('wrapContainers');
       var findbarHeight = this.bar.clientHeight;
       var inputContainerHeight = this.bar.firstElementChild.clientHeight;
+
       if (findbarHeight > inputContainerHeight) {
         this.bar.classList.add('wrapContainers');
       }

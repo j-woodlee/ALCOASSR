@@ -19,15 +19,15 @@
  * @licend The above is the entire license notice for the
  * Javascript code in this page
  */
-'use strict';
+"use strict";
 
-var _parser = require('../../core/parser');
+var _parser = require("../../core/parser");
 
-var _util = require('../../shared/util');
+var _util = require("../../shared/util");
 
-var _primitives = require('../../core/primitives');
+var _primitives = require("../../core/primitives");
 
-var _stream = require('../../core/stream');
+var _stream = require("../../core/stream");
 
 describe('parser', function () {
   describe('Lexer', function () {
@@ -39,6 +39,7 @@ describe('parser', function () {
     });
     it('should parse PostScript numbers', function () {
       var numbers = ['-.002', '34.5', '-3.62', '123.6e10', '1E-5', '-1.', '0.0', '123', '-98', '43445', '0', '+17'];
+
       for (var i = 0, ii = numbers.length; i < ii; i++) {
         var num = numbers[i];
         var input = new _stream.StringStream(num);
@@ -73,7 +74,8 @@ describe('parser', function () {
       expect(lexer.getNumber()).toEqual(0);
       var numbers = ['..', '-.', '+.', '-\r\n.', '+\r\n.'];
 
-      var _loop = function _loop(number) {
+      var _loop = function _loop() {
+        var number = numbers[_i];
         var input = new _stream.StringStream(number);
         var lexer = new _parser.Lexer(input);
         expect(function () {
@@ -81,29 +83,8 @@ describe('parser', function () {
         }).toThrowError(_util.FormatError, /^Invalid number:\s/);
       };
 
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = numbers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var number = _step.value;
-
-          _loop(number);
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
+      for (var _i = 0; _i < numbers.length; _i++) {
+        _loop();
       }
     });
     it('should handle glued numbers and operators', function () {
@@ -115,10 +96,12 @@ describe('parser', function () {
     });
     it('should stop parsing strings at the end of stream', function () {
       var input = new _stream.StringStream('(1$4)');
+
       input.getByte = function (super_getByte) {
         var ch = super_getByte.call(input);
         return ch === 0x24 ? -1 : ch;
       }.bind(input, input.getByte);
+
       var lexer = new _parser.Lexer(input);
       var result = lexer.getString();
       expect(result).toEqual('1');
@@ -138,6 +121,7 @@ describe('parser', function () {
     it('should handle Names with invalid usage of NUMBER SIGN (#)', function () {
       var inputNames = ['/# 680 0 R', '/#AQwerty', '/#A<</B'];
       var expectedNames = ['#', '#AQwerty', '#A'];
+
       for (var i = 0, ii = inputNames.length; i < ii; i++) {
         var input = new _stream.StringStream(inputNames[i]);
         var lexer = new _parser.Lexer(input);

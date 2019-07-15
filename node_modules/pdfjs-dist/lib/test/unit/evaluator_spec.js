@@ -19,26 +19,27 @@
  * @licend The above is the entire license notice for the
  * Javascript code in this page
  */
-'use strict';
+"use strict";
 
-var _primitives = require('../../core/primitives');
+var _primitives = require("../../core/primitives");
 
-var _util = require('../../shared/util');
+var _util = require("../../shared/util");
 
-var _stream = require('../../core/stream');
+var _stream = require("../../core/stream");
 
-var _operator_list = require('../../core/operator_list');
+var _operator_list = require("../../core/operator_list");
 
-var _evaluator = require('../../core/evaluator');
+var _evaluator = require("../../core/evaluator");
 
-var _worker = require('../../core/worker');
+var _worker = require("../../core/worker");
 
-var _test_utils = require('./test_utils');
+var _test_utils = require("./test_utils");
 
 describe('evaluator', function () {
   function HandlerMock() {
     this.inputs = [];
   }
+
   HandlerMock.prototype = {
     send: function send(name, data) {
       this.inputs.push({
@@ -47,13 +48,17 @@ describe('evaluator', function () {
       });
     }
   };
+
   function ResourcesMock() {}
+
   ResourcesMock.prototype = {
     get: function get(name) {
       return this[name];
     }
   };
+
   function PdfManagerMock() {}
+
   function runOperatorListCheck(evaluator, stream, resources, callback) {
     var result = new _operator_list.OperatorList();
     var task = new _worker.WorkerTask('OperatorListCheck');
@@ -68,6 +73,7 @@ describe('evaluator', function () {
       callback(reason);
     });
   }
+
   var partialEvaluator;
   beforeAll(function (done) {
     partialEvaluator = new _evaluator.PartialEvaluator({
@@ -298,6 +304,7 @@ describe('evaluator', function () {
   });
   describe('operator list', function () {
     function MessageHandlerMock() {}
+
     MessageHandlerMock.prototype = {
       send: function send() {}
     };

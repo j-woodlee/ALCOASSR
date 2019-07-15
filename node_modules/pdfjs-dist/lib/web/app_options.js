@@ -19,26 +19,29 @@
  * @licend The above is the entire license notice for the
  * Javascript code in this page
  */
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.OptionKind = exports.AppOptions = undefined;
+exports.OptionKind = exports.AppOptions = void 0;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _pdf = require("../pdf");
 
-var _pdf = require('../pdf');
-
-var _viewer_compatibility = require('./viewer_compatibility');
+var _viewer_compatibility = require("./viewer_compatibility");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var OptionKind = {
   VIEWER: 'viewer',
   API: 'api',
   WORKER: 'worker'
 };
+exports.OptionKind = OptionKind;
 var defaultOptions = {
   cursorToolOnLoad: {
     value: 0,
@@ -57,10 +60,6 @@ var defaultOptions = {
     kind: OptionKind.VIEWER
   },
   disablePageLabels: {
-    value: false,
-    kind: OptionKind.VIEWER
-  },
-  disablePageMode: {
     value: false,
     kind: OptionKind.VIEWER
   },
@@ -84,12 +83,17 @@ var defaultOptions = {
     value: 0,
     kind: OptionKind.VIEWER
   },
+  historyUpdateUrl: {
+    value: false,
+    kind: OptionKind.VIEWER
+  },
   imageResourcesPath: {
     value: './images/',
     kind: OptionKind.VIEWER
   },
   maxCanvasPixels: {
-    value: _viewer_compatibility.viewerCompatibilityParams.maxCanvasPixels || 16777216,
+    value: 16777216,
+    compatibility: _viewer_compatibility.viewerCompatibilityParams.maxCanvasPixels,
     kind: OptionKind.VIEWER
   },
   pdfBugEnabled: {
@@ -104,20 +108,16 @@ var defaultOptions = {
     value: false,
     kind: OptionKind.VIEWER
   },
-  showPreviousViewOnLoad: {
-    value: true,
-    kind: OptionKind.VIEWER
-  },
   sidebarViewOnLoad: {
-    value: 0,
+    value: -1,
     kind: OptionKind.VIEWER
   },
   scrollModeOnLoad: {
-    value: 0,
+    value: -1,
     kind: OptionKind.VIEWER
   },
   spreadModeOnLoad: {
-    value: 0,
+    value: -1,
     kind: OptionKind.VIEWER
   },
   textLayerMode: {
@@ -126,6 +126,10 @@ var defaultOptions = {
   },
   useOnlyCssZoom: {
     value: false,
+    kind: OptionKind.VIEWER
+  },
+  viewOnLoad: {
+    value: 0,
     kind: OptionKind.VIEWER
   },
   cMapPacked: {
@@ -141,7 +145,8 @@ var defaultOptions = {
     kind: OptionKind.API
   },
   disableCreateObjectURL: {
-    value: _pdf.apiCompatibilityParams.disableCreateObjectURL || false,
+    value: false,
+    compatibility: _pdf.apiCompatibilityParams.disableCreateObjectURL,
     kind: OptionKind.API
   },
   disableFontFace: {
@@ -186,6 +191,10 @@ var defaultOptions = {
   }
 };
 {
+  defaultOptions.disablePreferences = {
+    value: false,
+    kind: OptionKind.VIEWER
+  };
   defaultOptions.locale = {
     value: typeof navigator !== 'undefined' ? navigator.language : 'en-US',
     kind: OptionKind.VIEWER
@@ -193,7 +202,9 @@ var defaultOptions = {
 }
 var userOptions = Object.create(null);
 
-var AppOptions = function () {
+var AppOptions =
+/*#__PURE__*/
+function () {
   function AppOptions() {
     _classCallCheck(this, AppOptions);
 
@@ -201,38 +212,48 @@ var AppOptions = function () {
   }
 
   _createClass(AppOptions, null, [{
-    key: 'get',
+    key: "get",
     value: function get(name) {
-      var defaultOption = defaultOptions[name],
-          userOption = userOptions[name];
+      var userOption = userOptions[name];
+
       if (userOption !== undefined) {
         return userOption;
       }
-      return defaultOption !== undefined ? defaultOption.value : undefined;
+
+      var defaultOption = defaultOptions[name];
+
+      if (defaultOption !== undefined) {
+        return defaultOption.compatibility || defaultOption.value;
+      }
+
+      return undefined;
     }
   }, {
-    key: 'getAll',
+    key: "getAll",
     value: function getAll() {
       var kind = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-
       var options = Object.create(null);
+
       for (var name in defaultOptions) {
-        var defaultOption = defaultOptions[name],
-            userOption = userOptions[name];
-        if (kind && defaultOption.kind !== kind) {
+        var defaultOption = defaultOptions[name];
+
+        if (kind && kind !== defaultOption.kind) {
           continue;
         }
-        options[name] = userOption !== undefined ? userOption : defaultOption.value;
+
+        var userOption = userOptions[name];
+        options[name] = userOption !== undefined ? userOption : defaultOption.compatibility || defaultOption.value;
       }
+
       return options;
     }
   }, {
-    key: 'set',
+    key: "set",
     value: function set(name, value) {
       userOptions[name] = value;
     }
   }, {
-    key: 'remove',
+    key: "remove",
     value: function remove(name) {
       delete userOptions[name];
     }
@@ -242,4 +263,3 @@ var AppOptions = function () {
 }();
 
 exports.AppOptions = AppOptions;
-exports.OptionKind = OptionKind;

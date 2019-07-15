@@ -30,9 +30,11 @@ function initializePDFJS(callback) {
     var PDFNetworkStream = modules[2].PDFNetworkStream;
     var PDFFetchStream = modules[3].PDFFetchStream;
     var isNodeJS = modules[4];
+
     if (isNodeJS()) {
       throw new Error('The `gulp unittest` command cannot be used in ' + 'Node.js environments.');
     }
+
     if (typeof Response !== 'undefined' && 'body' in Response.prototype && typeof ReadableStream !== 'undefined') {
       displayApi.setPDFNetworkStreamFactory(function (params) {
         return new PDFFetchStream(params);
@@ -42,10 +44,12 @@ function initializePDFJS(callback) {
         return new PDFNetworkStream(params);
       });
     }
+
     GlobalWorkerOptions.workerSrc = '../../build/generic/build/pdf.worker.js';
     callback();
   });
 }
+
 (function () {
   window.jasmine = jasmineRequire.core(jasmineRequire);
   jasmineRequire.html(jasmine);
@@ -57,26 +61,27 @@ function initializePDFJS(callback) {
       return window.location;
     }
   });
-  var stoppingOnSpecFailure = queryString.getParam('failFast');
-  env.stopOnSpecFailure(typeof stoppingOnSpecFailure === 'undefined' ? false : stoppingOnSpecFailure);
-  var throwingExpectationFailures = queryString.getParam('throwFailures');
-  env.throwOnExpectationFailure(throwingExpectationFailures);
+  var config = {
+    failFast: queryString.getParam('failFast'),
+    oneFailurePerSpec: queryString.getParam('oneFailurePerSpec'),
+    hideDisabled: queryString.getParam('hideDisabled')
+  };
   var random = queryString.getParam('random');
-  env.randomizeTests(random);
-  var seed = queryString.getParam('seed');
-  if (seed) {
-    env.seed(seed);
+
+  if (random !== undefined && random !== '') {
+    config.random = random;
   }
+
+  var seed = queryString.getParam('seed');
+
+  if (seed) {
+    config.seed = seed;
+  }
+
   var htmlReporter = new jasmine.HtmlReporter({
     env: env,
-    onStopExecutionClick: function onStopExecutionClick() {
-      queryString.navigateWithNewParam('failFast', env.stoppingOnSpecFailure());
-    },
-    onThrowExpectationsClick: function onThrowExpectationsClick() {
-      queryString.navigateWithNewParam('throwFailures', !env.throwingExpectationFailures());
-    },
-    onRandomClick: function onRandomClick() {
-      queryString.navigateWithNewParam('random', !env.randomTests());
+    navigateWithNewParam: function navigateWithNewParam(key, value) {
+      return queryString.navigateWithNewParam(key, value);
     },
     addToExistingQueryString: function addToExistingQueryString(key, value) {
       return queryString.fullStringWithNewParam(key, value);
@@ -90,37 +95,45 @@ function initializePDFJS(callback) {
     createTextNode: function createTextNode() {
       return document.createTextNode.apply(document, arguments);
     },
-
     timer: new jasmine.Timer()
   });
   env.addReporter(htmlReporter);
+
   if (queryString.getParam('browser')) {
     var testReporter = new TestReporter(queryString.getParam('browser'), queryString.getParam('path'));
     env.addReporter(testReporter);
   }
+
   var specFilter = new jasmine.HtmlSpecFilter({
     filterString: function filterString() {
       return queryString.getParam('spec');
     }
   });
-  env.specFilter = function (spec) {
+
+  config.specFilter = function (spec) {
     return specFilter.matches(spec.getFullName());
   };
+
+  env.configure(config);
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
   var currentWindowOnload = window.onload;
+
   window.onload = function () {
     if (currentWindowOnload) {
       currentWindowOnload();
     }
+
     initializePDFJS(function () {
       htmlReporter.initialize();
       env.execute();
     });
   };
+
   function extend(destination, source) {
     for (var property in source) {
       destination[property] = source[property];
     }
+
     return destination;
   }
 })();

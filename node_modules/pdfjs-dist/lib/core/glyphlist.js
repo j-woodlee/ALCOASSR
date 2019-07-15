@@ -19,9 +19,10 @@
  * @licend The above is the entire license notice for the
  * Javascript code in this page
  */
-'use strict';
+"use strict";
 
 var getLookupTableFactory = require('../shared/util').getLookupTableFactory;
+
 var getGlyphsUnicode = getLookupTableFactory(function (t) {
   t['A'] = 0x0041;
   t['AE'] = 0x00C6;

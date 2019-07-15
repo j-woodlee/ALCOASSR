@@ -12,7 +12,9 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
 
             let worksheet = workbook.getWorksheet(worksheetName);
 
-            let regex1 = new RegExp("[0-9]*[a-zA-Z]{1}[0-9]*[a-zA-Z]{1}[0-9]*");
+
+
+            let regex1 = new RegExp("[0-9]{3,4}[a-zA-Z]{0,1}([-]{1}|[ ]{1})[0-9]{4}([-]{1}|[ ]{1})[0-9]{3}([-]{1}|[ ]{1})[0-9]{0,2}");
             let apn, permitNum, issuedDate, permitType, valuation, applicantName, permitDesc;
             worksheet.eachRow((row) => {
                 // if there is a permit type, add each value in the row to their array
@@ -26,7 +28,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
                     permitDesc = row.getCell(permitDescIndex).value;
 
                     // apn logic
-                    if (!regex1.test(apn)) {
+                    if (regex1.test(apn)) {
                         // console.log("regex does not terminate: " + apn);
                         let apnArray = apn.split(delimiter);
 
@@ -46,7 +48,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
                     permitNum = permitNum.substring(0,12); // truncate to 12 characters
 
                     // description logic
-                    permitDesc = "(" + permitNum + ") " + permitDesc.substring(0,250);
+                    permitDesc = ("(" + permitNum + ") " + permitDesc).substring(0,254);
 
                     // console.log(apn);
                     apns.push(apn);

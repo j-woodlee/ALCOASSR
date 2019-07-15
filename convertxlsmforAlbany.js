@@ -10,12 +10,11 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName) => {
     workbook.xlsx.readFile(readPath)
         .then(() => {
 
-
             let worksheet = workbook.getWorksheet(worksheetName);
 
             let apn, permitNum, issuedDate, permitType, valuation, applicantName, permitDesc;
             worksheet.eachRow((row) => {
-
+                // if there is a permit type, add each value in the row to their array
                 if (row.getCell(permitTypeIndex).value !== null) {
                     apn = row.getCell(apnIndex).value;
                     permitNum = row.getCell(permitNumIndex).value;
@@ -29,7 +28,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName) => {
                     permitNum = permitNum.substring(0,12); // truncate to 12 characters
 
                     // description logic
-                    permitDesc = "(" + permitNum + ") " + permitDesc.substring(0,250);
+                    permitDesc = ("(" + permitNum + ") " + permitDesc).substring(0,254);
 
                     apns.push(apn);
                     permitNums.push(permitNum);

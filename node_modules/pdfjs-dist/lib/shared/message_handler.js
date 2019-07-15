@@ -19,76 +19,89 @@
  * @licend The above is the entire license notice for the
  * Javascript code in this page
  */
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.MessageHandler = undefined;
+exports.MessageHandler = MessageHandler;
 
-var _regenerator = require('babel-runtime/regenerator');
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
-var _regenerator2 = _interopRequireDefault(_regenerator);
+var _util = require("./util");
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var resolveCall = function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee(fn, args) {
-    var thisArg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-    return _regenerator2.default.wrap(function _callee$(_context) {
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function resolveCall(_x, _x2) {
+  return _resolveCall.apply(this, arguments);
+}
+
+function _resolveCall() {
+  _resolveCall = _asyncToGenerator(
+  /*#__PURE__*/
+  _regenerator.default.mark(function _callee(fn, args) {
+    var thisArg,
+        _args = arguments;
+    return _regenerator.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            thisArg = _args.length > 2 && _args[2] !== undefined ? _args[2] : null;
+
             if (fn) {
-              _context.next = 2;
+              _context.next = 3;
               break;
             }
 
-            return _context.abrupt('return');
-
-          case 2:
-            return _context.abrupt('return', fn.apply(thisArg, args));
+            return _context.abrupt("return");
 
           case 3:
-          case 'end':
+            return _context.abrupt("return", fn.apply(thisArg, args));
+
+          case 4:
+          case "end":
             return _context.stop();
         }
       }
     }, _callee, this);
   }));
-
-  return function resolveCall(_x2, _x3) {
-    return _ref.apply(this, arguments);
-  };
-}();
-
-var _util = require('./util');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+  return _resolveCall.apply(this, arguments);
+}
 
 function wrapReason(reason) {
-  if ((typeof reason === 'undefined' ? 'undefined' : _typeof(reason)) !== 'object') {
+  if (_typeof(reason) !== 'object') {
     return reason;
   }
+
   switch (reason.name) {
     case 'AbortException':
       return new _util.AbortException(reason.message);
+
     case 'MissingPDFException':
       return new _util.MissingPDFException(reason.message);
+
     case 'UnexpectedResponseException':
       return new _util.UnexpectedResponseException(reason.message, reason.status);
+
     default:
       return new _util.UnknownErrorException(reason.message, reason.details);
   }
 }
+
 function makeReasonSerializable(reason) {
   if (!(reason instanceof Error) || reason instanceof _util.AbortException || reason instanceof _util.MissingPDFException || reason instanceof _util.UnexpectedResponseException || reason instanceof _util.UnknownErrorException) {
     return reason;
   }
+
   return new _util.UnknownErrorException(reason.message, reason.toString());
 }
+
 function resolveOrReject(capability, success, reason) {
   if (success) {
     capability.resolve();
@@ -96,9 +109,11 @@ function resolveOrReject(capability, success, reason) {
     capability.reject(reason);
   }
 }
+
 function finalize(promise) {
   return Promise.resolve(promise).catch(function () {});
 }
+
 function MessageHandler(sourceName, targetName, comObj) {
   var _this = this;
 
@@ -112,28 +127,34 @@ function MessageHandler(sourceName, targetName, comObj) {
   this.streamControllers = Object.create(null);
   var callbacksCapabilities = this.callbacksCapabilities = Object.create(null);
   var ah = this.actionHandler = Object.create(null);
+
   this._onComObjOnMessage = function (event) {
     var data = event.data;
+
     if (data.targetName !== _this.sourceName) {
       return;
     }
+
     if (data.stream) {
       _this._processStreamMessage(data);
     } else if (data.isReply) {
       var callbackId = data.callbackId;
+
       if (data.callbackId in callbacksCapabilities) {
         var callback = callbacksCapabilities[callbackId];
         delete callbacksCapabilities[callbackId];
+
         if ('error' in data) {
           callback.reject(wrapReason(data.error));
         } else {
           callback.resolve(data.data);
         }
       } else {
-        throw new Error('Cannot resolve callback ' + callbackId);
+        throw new Error("Cannot resolve callback ".concat(callbackId));
       }
     } else if (data.action in ah) {
       var action = ah[data.action];
+
       if (data.callbackId) {
         var _sourceName = _this.sourceName;
         var _targetName = data.sourceName;
@@ -162,17 +183,21 @@ function MessageHandler(sourceName, targetName, comObj) {
         action[0].call(action[1], data.data);
       }
     } else {
-      throw new Error('Unknown action from worker: ' + data.action);
+      throw new Error("Unknown action from worker: ".concat(data.action));
     }
   };
+
   comObj.addEventListener('message', this._onComObjOnMessage);
 }
+
 MessageHandler.prototype = {
   on: function on(actionName, handler, scope) {
     var ah = this.actionHandler;
+
     if (ah[actionName]) {
-      throw new Error('There is already an actionName called "' + actionName + '"');
+      throw new Error("There is already an actionName called \"".concat(actionName, "\""));
     }
+
     ah[actionName] = [handler, scope];
   },
   send: function send(actionName, data, transfers) {
@@ -195,11 +220,13 @@ MessageHandler.prototype = {
     };
     var capability = (0, _util.createPromiseCapability)();
     this.callbacksCapabilities[callbackId] = capability;
+
     try {
       this.postMessage(message, transfers);
     } catch (e) {
       capability.reject(e);
     }
+
     return capability.promise;
   },
   sendWithStream: function sendWithStream(actionName, data, queueingStrategy, transfers) {
@@ -216,6 +243,7 @@ MessageHandler.prototype = {
           startCall: startCapability,
           isClosed: false
         };
+
         _this2.postMessage({
           sourceName: sourceName,
           targetName: targetName,
@@ -224,11 +252,13 @@ MessageHandler.prototype = {
           data: data,
           desiredSize: controller.desiredSize
         });
+
         return startCapability.promise;
       },
       pull: function pull(controller) {
         var pullCapability = (0, _util.createPromiseCapability)();
         _this2.streamControllers[streamId].pullCall = pullCapability;
+
         _this2.postMessage({
           sourceName: sourceName,
           targetName: targetName,
@@ -236,12 +266,14 @@ MessageHandler.prototype = {
           streamId: streamId,
           desiredSize: controller.desiredSize
         });
+
         return pullCapability.promise;
       },
       cancel: function cancel(reason) {
         var cancelCapability = (0, _util.createPromiseCapability)();
         _this2.streamControllers[streamId].cancelCall = cancelCapability;
         _this2.streamControllers[streamId].isClosed = true;
+
         _this2.postMessage({
           sourceName: sourceName,
           targetName: targetName,
@@ -249,6 +281,7 @@ MessageHandler.prototype = {
           reason: reason,
           streamId: streamId
         });
+
         return cancelCapability.promise;
       }
     }, queueingStrategy);
@@ -263,12 +296,13 @@ MessageHandler.prototype = {
     var sourceName = this.sourceName;
     var targetName = data.sourceName;
     var capability = (0, _util.createPromiseCapability)();
-    var sendStreamRequest = function sendStreamRequest(_ref2) {
-      var stream = _ref2.stream,
-          chunk = _ref2.chunk,
-          transfers = _ref2.transfers,
-          success = _ref2.success,
-          reason = _ref2.reason;
+
+    var sendStreamRequest = function sendStreamRequest(_ref) {
+      var stream = _ref.stream,
+          chunk = _ref.chunk,
+          transfers = _ref.transfers,
+          success = _ref.success,
+          reason = _ref.reason;
 
       _this3.postMessage({
         sourceName: sourceName,
@@ -280,20 +314,24 @@ MessageHandler.prototype = {
         reason: reason
       }, transfers);
     };
+
     var streamSink = {
       enqueue: function enqueue(chunk) {
         var size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
-        var transfers = arguments[2];
+        var transfers = arguments.length > 2 ? arguments[2] : undefined;
 
         if (this.isCancelled) {
           return;
         }
+
         var lastDesiredSize = this.desiredSize;
         this.desiredSize -= size;
+
         if (lastDesiredSize > 0 && this.desiredSize <= 0) {
           this.sinkCapability = (0, _util.createPromiseCapability)();
           this.ready = this.sinkCapability.promise;
         }
+
         sendStreamRequest({
           stream: 'enqueue',
           chunk: chunk,
@@ -304,21 +342,24 @@ MessageHandler.prototype = {
         if (this.isCancelled) {
           return;
         }
+
         this.isCancelled = true;
-        sendStreamRequest({ stream: 'close' });
+        sendStreamRequest({
+          stream: 'close'
+        });
         delete self.streamSinks[streamId];
       },
       error: function error(reason) {
         if (this.isCancelled) {
           return;
         }
+
         this.isCancelled = true;
         sendStreamRequest({
           stream: 'error',
           reason: reason
         });
       },
-
       sinkCapability: capability,
       onPull: null,
       onCancel: null,
@@ -348,10 +389,11 @@ MessageHandler.prototype = {
     var sourceName = this.sourceName;
     var targetName = data.sourceName;
     var streamId = data.streamId;
-    var sendStreamResponse = function sendStreamResponse(_ref3) {
-      var stream = _ref3.stream,
-          success = _ref3.success,
-          reason = _ref3.reason;
+
+    var sendStreamResponse = function sendStreamResponse(_ref2) {
+      var stream = _ref2.stream,
+          success = _ref2.success,
+          reason = _ref2.reason;
 
       _this4.comObj.postMessage({
         sourceName: sourceName,
@@ -362,6 +404,7 @@ MessageHandler.prototype = {
         reason: reason
       });
     };
+
     var deleteStreamController = function deleteStreamController() {
       Promise.all([_this4.streamControllers[data.streamId].startCall, _this4.streamControllers[data.streamId].pullCall, _this4.streamControllers[data.streamId].cancelCall].map(function (capability) {
         return capability && finalize(capability.promise);
@@ -369,13 +412,16 @@ MessageHandler.prototype = {
         delete _this4.streamControllers[data.streamId];
       });
     };
+
     switch (data.stream) {
       case 'start_complete':
         resolveOrReject(this.streamControllers[data.streamId].startCall, data.success, wrapReason(data.reason));
         break;
+
       case 'pull_complete':
         resolveOrReject(this.streamControllers[data.streamId].pullCall, data.success, wrapReason(data.reason));
         break;
+
       case 'pull':
         if (!this.streamSinks[data.streamId]) {
           sendStreamResponse({
@@ -384,9 +430,11 @@ MessageHandler.prototype = {
           });
           break;
         }
+
         if (this.streamSinks[data.streamId].desiredSize <= 0 && data.desiredSize > 0) {
           this.streamSinks[data.streamId].sinkCapability.resolve();
         }
+
         this.streamSinks[data.streamId].desiredSize = data.desiredSize;
         resolveCall(this.streamSinks[data.streamId].onPull).then(function () {
           sendStreamResponse({
@@ -401,34 +449,44 @@ MessageHandler.prototype = {
           });
         });
         break;
+
       case 'enqueue':
         (0, _util.assert)(this.streamControllers[data.streamId], 'enqueue should have stream controller');
+
         if (!this.streamControllers[data.streamId].isClosed) {
           this.streamControllers[data.streamId].controller.enqueue(data.chunk);
         }
+
         break;
+
       case 'close':
         (0, _util.assert)(this.streamControllers[data.streamId], 'close should have stream controller');
+
         if (this.streamControllers[data.streamId].isClosed) {
           break;
         }
+
         this.streamControllers[data.streamId].isClosed = true;
         this.streamControllers[data.streamId].controller.close();
         deleteStreamController();
         break;
+
       case 'error':
         (0, _util.assert)(this.streamControllers[data.streamId], 'error should have stream controller');
         this.streamControllers[data.streamId].controller.error(wrapReason(data.reason));
         deleteStreamController();
         break;
+
       case 'cancel_complete':
         resolveOrReject(this.streamControllers[data.streamId].cancelCall, data.success, wrapReason(data.reason));
         deleteStreamController();
         break;
+
       case 'cancel':
         if (!this.streamSinks[data.streamId]) {
           break;
         }
+
         resolveCall(this.streamSinks[data.streamId].onCancel, [wrapReason(data.reason)]).then(function () {
           sendStreamResponse({
             stream: 'cancel_complete',
@@ -445,6 +503,7 @@ MessageHandler.prototype = {
         this.streamSinks[data.streamId].isCancelled = true;
         delete this.streamSinks[data.streamId];
         break;
+
       default:
         throw new Error('Unexpected stream case');
     }
@@ -460,4 +519,3 @@ MessageHandler.prototype = {
     this.comObj.removeEventListener('message', this._onComObjOnMessage);
   }
 };
-exports.MessageHandler = MessageHandler;

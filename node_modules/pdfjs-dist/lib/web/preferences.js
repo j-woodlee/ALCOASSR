@@ -24,29 +24,32 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.BasePreferences = undefined;
+exports.BasePreferences = void 0;
 
-var _regenerator = require("babel-runtime/regenerator");
-
-var _regenerator2 = _interopRequireDefault(_regenerator);
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 var defaultPreferences = null;
+
 function getDefaultPreferences() {
   if (!defaultPreferences) {
     defaultPreferences = Promise.resolve({
-      "showPreviousViewOnLoad": true,
+      "viewOnLoad": 0,
       "defaultZoomValue": "",
-      "sidebarViewOnLoad": 0,
+      "sidebarViewOnLoad": -1,
       "cursorToolOnLoad": 0,
       "enableWebGL": false,
       "eventBusDispatchToDOM": false,
@@ -61,16 +64,19 @@ function getDefaultPreferences() {
       "renderer": "canvas",
       "renderInteractiveForms": false,
       "enablePrintAutoRotate": false,
-      "disablePageMode": false,
       "disablePageLabels": false,
-      "scrollModeOnLoad": 0,
-      "spreadModeOnLoad": 0
+      "historyUpdateUrl": false,
+      "scrollModeOnLoad": -1,
+      "spreadModeOnLoad": -1
     });
   }
+
   return defaultPreferences;
 }
 
-var BasePreferences = function () {
+var BasePreferences =
+/*#__PURE__*/
+function () {
   function BasePreferences() {
     var _this = this;
 
@@ -79,6 +85,7 @@ var BasePreferences = function () {
     if (this.constructor === BasePreferences) {
       throw new Error('Cannot initialize BasePreferences.');
     }
+
     this.prefs = null;
     this._initializedPromise = getDefaultPreferences().then(function (defaults) {
       Object.defineProperty(_this, 'defaults', {
@@ -93,12 +100,15 @@ var BasePreferences = function () {
       if (!prefs) {
         return;
       }
+
       for (var name in prefs) {
         var defaultValue = _this.defaults[name],
             prefValue = prefs[name];
-        if (defaultValue === undefined || (typeof prefValue === "undefined" ? "undefined" : _typeof(prefValue)) !== (typeof defaultValue === "undefined" ? "undefined" : _typeof(defaultValue))) {
+
+        if (defaultValue === undefined || _typeof(prefValue) !== _typeof(defaultValue)) {
           continue;
         }
+
         _this.prefs[name] = prefValue;
       }
     });
@@ -107,8 +117,10 @@ var BasePreferences = function () {
   _createClass(BasePreferences, [{
     key: "_writeToStorage",
     value: function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee(prefObj) {
-        return _regenerator2.default.wrap(function _callee$(_context) {
+      var _writeToStorage2 = _asyncToGenerator(
+      /*#__PURE__*/
+      _regenerator.default.mark(function _callee(prefObj) {
+        return _regenerator.default.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
@@ -123,7 +135,7 @@ var BasePreferences = function () {
       }));
 
       function _writeToStorage(_x) {
-        return _ref.apply(this, arguments);
+        return _writeToStorage2.apply(this, arguments);
       }
 
       return _writeToStorage;
@@ -131,8 +143,10 @@ var BasePreferences = function () {
   }, {
     key: "_readFromStorage",
     value: function () {
-      var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2(prefObj) {
-        return _regenerator2.default.wrap(function _callee2$(_context2) {
+      var _readFromStorage2 = _asyncToGenerator(
+      /*#__PURE__*/
+      _regenerator.default.mark(function _callee2(prefObj) {
+        return _regenerator.default.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
@@ -147,7 +161,7 @@ var BasePreferences = function () {
       }));
 
       function _readFromStorage(_x2) {
-        return _ref2.apply(this, arguments);
+        return _readFromStorage2.apply(this, arguments);
       }
 
       return _readFromStorage;
@@ -155,8 +169,10 @@ var BasePreferences = function () {
   }, {
     key: "reset",
     value: function () {
-      var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee3() {
-        return _regenerator2.default.wrap(function _callee3$(_context3) {
+      var _reset = _asyncToGenerator(
+      /*#__PURE__*/
+      _regenerator.default.mark(function _callee3() {
+        return _regenerator.default.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
@@ -176,7 +192,7 @@ var BasePreferences = function () {
       }));
 
       function reset() {
-        return _ref3.apply(this, arguments);
+        return _reset.apply(this, arguments);
       }
 
       return reset;
@@ -184,9 +200,11 @@ var BasePreferences = function () {
   }, {
     key: "set",
     value: function () {
-      var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee4(name, value) {
+      var _set = _asyncToGenerator(
+      /*#__PURE__*/
+      _regenerator.default.mark(function _callee4(name, value) {
         var defaultValue, valueType, defaultType;
-        return _regenerator2.default.wrap(function _callee4$(_context4) {
+        return _regenerator.default.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
@@ -201,7 +219,7 @@ var BasePreferences = function () {
                   break;
                 }
 
-                throw new Error("Set preference: \"" + name + "\" is undefined.");
+                throw new Error("Set preference: \"".concat(name, "\" is undefined."));
 
               case 7:
                 if (!(value === undefined)) {
@@ -212,8 +230,8 @@ var BasePreferences = function () {
                 throw new Error('Set preference: no value is specified.');
 
               case 9:
-                valueType = typeof value === "undefined" ? "undefined" : _typeof(value);
-                defaultType = typeof defaultValue === "undefined" ? "undefined" : _typeof(defaultValue);
+                valueType = _typeof(value);
+                defaultType = _typeof(defaultValue);
 
                 if (!(valueType !== defaultType)) {
                   _context4.next = 19;
@@ -230,7 +248,7 @@ var BasePreferences = function () {
                 break;
 
               case 16:
-                throw new Error("Set preference: \"" + value + "\" is a " + valueType + ", " + ("expected a " + defaultType + "."));
+                throw new Error("Set preference: \"".concat(value, "\" is a ").concat(valueType, ", ") + "expected a ".concat(defaultType, "."));
 
               case 17:
                 _context4.next = 21;
@@ -242,7 +260,7 @@ var BasePreferences = function () {
                   break;
                 }
 
-                throw new Error("Set preference: \"" + value + "\" must be an integer.");
+                throw new Error("Set preference: \"".concat(value, "\" must be an integer."));
 
               case 21:
                 this.prefs[name] = value;
@@ -257,7 +275,7 @@ var BasePreferences = function () {
       }));
 
       function set(_x3, _x4) {
-        return _ref4.apply(this, arguments);
+        return _set.apply(this, arguments);
       }
 
       return set;
@@ -265,9 +283,11 @@ var BasePreferences = function () {
   }, {
     key: "get",
     value: function () {
-      var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee5(name) {
+      var _get = _asyncToGenerator(
+      /*#__PURE__*/
+      _regenerator.default.mark(function _callee5(name) {
         var defaultValue, prefValue;
-        return _regenerator2.default.wrap(function _callee5$(_context5) {
+        return _regenerator.default.wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
@@ -282,7 +302,7 @@ var BasePreferences = function () {
                   break;
                 }
 
-                throw new Error("Get preference: \"" + name + "\" is undefined.");
+                throw new Error("Get preference: \"".concat(name, "\" is undefined."));
 
               case 7:
                 prefValue = this.prefs[name];
@@ -306,7 +326,7 @@ var BasePreferences = function () {
       }));
 
       function get(_x5) {
-        return _ref5.apply(this, arguments);
+        return _get.apply(this, arguments);
       }
 
       return get;
@@ -314,8 +334,10 @@ var BasePreferences = function () {
   }, {
     key: "getAll",
     value: function () {
-      var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee6() {
-        return _regenerator2.default.wrap(function _callee6$(_context6) {
+      var _getAll = _asyncToGenerator(
+      /*#__PURE__*/
+      _regenerator.default.mark(function _callee6() {
+        return _regenerator.default.wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
@@ -334,7 +356,7 @@ var BasePreferences = function () {
       }));
 
       function getAll() {
-        return _ref6.apply(this, arguments);
+        return _getAll.apply(this, arguments);
       }
 
       return getAll;
