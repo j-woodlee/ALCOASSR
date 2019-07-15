@@ -35,7 +35,7 @@ case "Livermore":
     Albany.readAndCreate(workbook, readPath, writePath, worksheetName);
     break;
 case "Fremont":
-    Albany.readAndCreate(workbook, readPath, writePath, worksheetName, delimiter);
+    Alameda.readAndCreate(workbook, readPath, writePath, worksheetName, delimiter);
     break;
 default:
     break;

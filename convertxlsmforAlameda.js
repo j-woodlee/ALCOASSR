@@ -14,18 +14,23 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
 
 
 
-            let regex1 = new RegExp("[0-9]{3,4}[a-zA-Z]{0,1}([-]{1}|[ ]{1})[0-9]{4}([-]{1}|[ ]{1})[0-9]{3}([-]{1}|[ ]{1})[0-9]{0,2}");
+            let regex1 = new RegExp("[0-9]{3,4}[a-zA-Z]{0,1}([-]{1}|[ ]{1})[0-9]{4}([-]{1}|[ ]{1})[0-9]{3}([-]{1}|[ ]{1})[0-9]{0,2}"); // apns that need formatting
+            let regex2 = new RegExp("[0-9]{3}([ ]{1}|[A-Za-z]{1})[0-9]+"); // finished APN expression
+
             let apn, permitNum, issuedDate, permitType, valuation, applicantName, permitDesc;
             worksheet.eachRow((row) => {
+
+                apn = row.getCell(apnIndex).value;
+                permitNum = row.getCell(permitNumIndex).value;
+                issuedDate = row.getCell(issuedDateIndex).value;
+                permitType = row.getCell(permitTypeIndex).value;
+                valuation = row.getCell(valuationIndex).value;
+                applicantName = row.getCell(applicantNameIndex).value;
+                permitDesc = row.getCell(permitDescIndex).value;
+
                 // if there is a permit type, add each value in the row to their array
-                if (row.getCell(permitTypeIndex).value !== null) {
-                    apn = row.getCell(apnIndex).value;
-                    permitNum = row.getCell(permitNumIndex).value;
-                    issuedDate = row.getCell(issuedDateIndex).value;
-                    permitType = row.getCell(permitTypeIndex).value;
-                    valuation = row.getCell(valuationIndex).value;
-                    applicantName = row.getCell(applicantNameIndex).value;
-                    permitDesc = row.getCell(permitDescIndex).value;
+                // only add the rows that have either an already good APN or one that is in the proper format for modification
+                if (permitType !== null && (regex1.test(apn) || regex2.test(apn))) {
 
                     // apn logic
                     if (regex1.test(apn)) {
@@ -48,7 +53,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
                     permitNum = permitNum.substring(0,12); // truncate to 12 characters
 
                     // description logic
-                    permitDesc = ("(" + permitNum + ") " + permitDesc).substring(0,254);
+                    permitDesc = ("(" + permitNum + ") " + permitDesc).substring(0,253);
 
                     // console.log(apn);
                     apns.push(apn);
@@ -84,6 +89,15 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
                 { header: "Applicant Name", key: "applicantName", width: 25 }, // F
                 { header: "Permit Description", key: "permitDesc", width: 20 } // G
             ];
+
+            apns.unshift("Parcel Numbers");
+            permitNums.unshift("Permit Numbers");
+            issuedDates.unshift("Issued Dates");
+            permitTypes.unshift("Permit Types");
+            valuations.unshift("Valuations");
+            applicantNames.unshift("Applicant Names");
+            permitDescs.unshift("Permit Description");
+
             sheet.getColumn("A").values = apns;
             sheet.getColumn("B").values = permitNums;
             sheet.getColumn("C").values = issuedDates;
