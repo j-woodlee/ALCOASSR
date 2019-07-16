@@ -23,10 +23,10 @@ case "Alameda":
     Alameda.readAndCreate(workbook, readPath, writePath, worksheetName, delimiter);
     break;
 case "Albany":
-    Albany.readAndCreate(workbook, readPath, writePath, worksheetName);
+    Alameda.readAndCreate(workbook, readPath, writePath, worksheetName);
     break;
 case "Berkeley":
-    Albany.readAndCreate(workbook, readPath, writePath, worksheetName);
+    Alameda.readAndCreate(workbook, readPath, writePath, worksheetName);
     break;
 case "Emeryville":
     Albany.readAndCreate(workbook, readPath, writePath, worksheetName);

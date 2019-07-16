@@ -3,7 +3,7 @@ let Excel = require("exceljs");
 let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) => {
     console.log("Reading from: " + "\"" + readPath + "\"");
 
-    let apns = [], permitNums = [], issuedDates = [], permitTypes = [], valuations= [], applicantNames= [], permitDescs = [];
+    let apns = [], permitNums = [], issuedDates = [], permitTypes = [], valuations= [], applicantNames= [], permitDescs = [], originalAPNs = [];
     let apnIndex = "A", permitNumIndex = "H", issuedDateIndex = "I", permitTypeIndex = "D",
         valuationIndex = "E", applicantNameIndex = "L", permitDescIndex = "F";
 
@@ -12,14 +12,14 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
 
             let worksheet = workbook.getWorksheet(worksheetName);
 
-
-
             let regex1 = new RegExp("[0-9]{3,4}[a-zA-Z]{0,1}([-]{1}|[ ]{1})[0-9]{4}([-]{1}|[ ]{1})[0-9]{3}([-]{1}|[ ]{1})[0-9]{0,2}"); // apns that need formatting
-            let regex2 = new RegExp("[0-9]{3}([ ]{1}|[A-Za-z]{1})[0-9]+"); // finished APN expression
+            // let regex2 = new RegExp("[0-9]{3}([ ]{1}|[A-Za-z]{1})[0-9]+"); // finished APN expression
+            let regex2 = new RegExp("[0-9]{3}-[0-9]{3,4}-[0-9]{1,2}");
 
-            let apn, permitNum, issuedDate, permitType, valuation, applicantName, permitDesc;
+            let originalAPN, apn, permitNum, issuedDate, permitType, valuation, applicantName, permitDesc;
             worksheet.eachRow((row) => {
 
+                originalAPN = row.getCell(apnIndex).value;
                 apn = row.getCell(apnIndex).value;
                 permitNum = row.getCell(permitNumIndex).value;
                 issuedDate = row.getCell(issuedDateIndex).value;
@@ -30,11 +30,10 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
 
                 // if there is a permit type, add each value in the row to their array
                 // only add the rows that have either an already good APN or one that is in the proper format for modification
-                if (permitType !== null && (regex1.test(apn) || regex2.test(apn))) {
+                if (permitType !== null) {
 
                     // apn logic
                     if (regex1.test(apn)) {
-                        // console.log("regex does not terminate: " + apn);
                         let apnArray = apn.split(delimiter);
 
                         let book = apnArray[0] === undefined ? "" : apnArray[0].replace(/\s/g, ""); // remove all spaces
@@ -47,6 +46,13 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
                         }
                         // concatenate all 4 strings
                         apn = book + page +  parcel + subPN;
+                    } else if (regex2.test(apn)) {
+                        let apnArray = apn.split("-");
+
+                        let page = apnArray[1].length > 3 ? apnArray[1] : "0" + apnArray[1];
+                        let parcel = apnArray[2].length > 1 ? "0" + apnArray[2] : "00" + apnArray[2];
+
+                        apn = apnArray[0] + " " + page + parcel + "00";  // book + page + parcel + subPN
                     }
 
                     // permit number logic
@@ -56,6 +62,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
                     permitDesc = ("(" + permitNum + ") " + permitDesc).substring(0,253);
 
                     // console.log(apn);
+                    originalAPNs.push(originalAPN);
                     apns.push(apn);
                     permitNums.push(permitNum);
                     issuedDates.push(issuedDate);
@@ -81,6 +88,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
 
             let sheet = writeBook.addWorksheet("Sheet 1");
             sheet.columns = [
+                { header: "Original Parcel Number", key: "originalAPN", width: 15 },
                 { header: "Parcel Number", key: "apn", width: 15 },  // A
                 { header: "Permit Number", key: "permitNum", width: 15 }, // B
                 { header: "Issued Date", key: "issueDate", width: 15 }, // C
@@ -90,21 +98,22 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
                 { header: "Permit Description", key: "permitDesc", width: 20 } // G
             ];
 
-            apns.unshift("Parcel Numbers");
-            permitNums.unshift("Permit Numbers");
-            issuedDates.unshift("Issued Dates");
-            permitTypes.unshift("Permit Types");
-            valuations.unshift("Valuations");
-            applicantNames.unshift("Applicant Names");
-            permitDescs.unshift("Permit Description");
+            // apns.unshift("Parcel Numbers");
+            // permitNums.unshift("Permit Numbers");
+            // issuedDates.unshift("Issued Dates");
+            // permitTypes.unshift("Permit Types");
+            // valuations.unshift("Valuations");
+            // applicantNames.unshift("Applicant Names");
+            // permitDescs.unshift("Permit Description");
 
-            sheet.getColumn("A").values = apns;
-            sheet.getColumn("B").values = permitNums;
-            sheet.getColumn("C").values = issuedDates;
-            sheet.getColumn("D").values = permitTypes;
-            sheet.getColumn("E").values = valuations;
-            sheet.getColumn("F").values = applicantNames;
-            sheet.getColumn("G").values = permitDescs;
+            sheet.getColumn("A").values = originalAPNs;
+            sheet.getColumn("B").values = apns;
+            sheet.getColumn("C").values = permitNums;
+            sheet.getColumn("D").values = issuedDates;
+            sheet.getColumn("E").values = permitTypes;
+            sheet.getColumn("F").values = valuations;
+            sheet.getColumn("G").values = applicantNames;
+            sheet.getColumn("H").values = permitDescs;
 
             console.log("Writing to: " + "\"" + writePath + "\"");
             writeBook.xlsx.writeFile(writePath)
