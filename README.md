@@ -34,10 +34,6 @@ This script will make the new parcelized file in the P drive (in the test direct
 
 ## Script Logic
 
-There is one master file (convertXLSMtoXLSX.js) that reads the parameters and matches them with the appropriate settings
-of the agency.  Meaning the program is run differently when Alameda is entered versus Albany.  Many agencies have files that are
-structured the same way so fortunately there can be a lot of code reuse, and the program will run the same when Fremont and Alameda are entered for example (except for the paths of course).  
-
 First the "to write.xlsm" file is read.  The only rows we are interested in are those with a present permit type, so that's the first filter.
 
 The script loops through every row in the .xlsm file, but ignores the ones that have a null permit type.  When a row is found that has a non-null
