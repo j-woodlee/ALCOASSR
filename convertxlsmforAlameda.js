@@ -10,7 +10,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
     workbook.xlsx.readFile(readPath)
         .then(() => {
 
-            let worksheet = workbook.getWorksheet(1);
+            let worksheet = workbook.getWorksheet(worksheetName);
 
             let regex1 = new RegExp("[0-9]{3,4}[a-zA-Z]{0,1}([-]{1}|[ ]{1})[0-9]{4}([-]{1}|[ ]{1})[0-9]{3}([-]{1}|[ ]{1})[0-9]{0,2}"); // apns that need formatting
             // let regex2 = new RegExp("[0-9]{3}([ ]{1}|[A-Za-z]{1})[0-9]+"); // finished APN expression
