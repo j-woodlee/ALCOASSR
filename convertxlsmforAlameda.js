@@ -5,7 +5,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
 
     let apns = [], permitNums = [], issuedDates = [], permitTypes = [], valuations= [], applicantNames= [], permitDescs = [], originalAPNs = [];
     let apnIndex = "A", permitNumIndex = "H", issuedDateIndex = "I", permitTypeIndex = "D",
-        valuationIndex = "E", applicantNameIndex = "L", permitDescIndex = "F";
+        valuationIndex = "E", applicantNameIndex = "J", permitDescIndex = "F";
 
     workbook.xlsx.readFile(readPath)
         .then(() => {
@@ -56,7 +56,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
                     }
 
                     // permit number logic
-                    permitNum = permitNum.substring(0,12); // truncate to 12 characters
+                    permitNum = permitNum.toString().substring(0,12); // truncate to 12 characters
 
                     // description logic
                     permitDesc = ("(" + permitNum + ") " + permitDesc).substring(0,253);
