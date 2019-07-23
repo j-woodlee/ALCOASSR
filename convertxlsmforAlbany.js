@@ -47,7 +47,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName) => {
             writeBook.created = new Date();
             writeBook.modified = new Date();
             writeBook.lastPrinted = new Date();
-            workbook.views = [
+            writeBook.views = [
                 {
                     x: 0, y: 0, width: 10000, height: 20000,
                     firstSheet: 0, activeTab: 1, visibility: "visible"

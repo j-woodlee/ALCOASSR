@@ -13,7 +13,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
             let worksheet = workbook.getWorksheet(worksheetName);
 
             let regex1 = new RegExp("[0-9]{2,4}[a-zA-Z]{0,1}([-]{1}|[ ]{1})[0-9]{4}([-]{1}|[ ]{1})[0-9]{3}([-]{1}|[ ]{1})[0-9]{0,3}"); // apns that need formatting
-            let regex2 = new RegExp("[0-9]{3}-[0-9]{3,4}-[0-9]{1,2}");
+            let regex2 = new RegExp("[0-9]{3}-[0-9]{3,4}-[0-9]{1,2}"); // another format for APNs
             // let regex3 = new RegExp("[0-9]{3,4}[a-zA-Z]{0,1}[ ][0-9]{4}[ ][0-9]{3}[ ][0-9]{0,3}"); // finished APN expression
 
             let originalAPN, apn, permitNum, issuedDate, permitType, valuation, applicantName, permitDesc;
@@ -38,20 +38,21 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
                         // 444-0060-990-132 -> 444 0060990132
                         // 44A-0060-990-132 -> 044A0060990132
 
-                        let book = apnArray[0] === undefined ? "" : apnArray[0].replace(/\s/g, ""); // remove all spaces
+                        let book = apnArray[0] === undefined ? "" : apnArray[0].replace(/\s/g, ""); // remove all spaces if it is not undefined
                         let page = apnArray[1] === undefined ? "" : apnArray[1].replace(/\s/g, "");
                         let parcel = apnArray[2] === undefined ? "" : apnArray[2].replace(/\s/g, "");
                         let subPN = apnArray[3] === undefined ? "00" : apnArray[3].replace(/\s/g, "");
 
                         if (book.length < 4) {
-                            if (book.match(/[a-z]/i)) { // if the book is 2 or 3 characters and has an alpha character
+                            if (book.match(/[a-z]/i)) { // if the book has an alpha character
                                 // we want to add a leading zero
                                 book = "0" + book;
                             } else {
+                                // or we want to add a trailing space in all other cases
                                 book = book + " ";
                             }
                         }
-                        // concatenate all 4 strings
+                        // concatenate all 4 strings to create the complete parcel number
                         apn = book + page +  parcel + subPN;
                     } else if (regex2.test(apn)) {
                         let apnArray = apn.split("-");
@@ -86,7 +87,7 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
             writeBook.created = new Date();
             writeBook.modified = new Date();
             writeBook.lastPrinted = new Date();
-            workbook.views = [
+            writeBook.views = [
                 {
                     x: 0, y: 0, width: 10000, height: 20000,
                     firstSheet: 0, activeTab: 1, visibility: "visible"
