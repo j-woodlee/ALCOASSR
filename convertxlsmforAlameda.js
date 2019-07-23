@@ -12,9 +12,9 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
 
             let worksheet = workbook.getWorksheet(worksheetName);
 
-            let regex1 = new RegExp("[0-9]{3,4}[a-zA-Z]{0,1}([-]{1}|[ ]{1})[0-9]{4}([-]{1}|[ ]{1})[0-9]{3}([-]{1}|[ ]{1})[0-9]{0,2}"); // apns that need formatting
-            // let regex2 = new RegExp("[0-9]{3}([ ]{1}|[A-Za-z]{1})[0-9]+"); // finished APN expression
+            let regex1 = new RegExp("[0-9]{2,4}[a-zA-Z]{0,1}([-]{1}|[ ]{1})[0-9]{4}([-]{1}|[ ]{1})[0-9]{3}([-]{1}|[ ]{1})[0-9]{0,3}"); // apns that need formatting
             let regex2 = new RegExp("[0-9]{3}-[0-9]{3,4}-[0-9]{1,2}");
+            // let regex3 = new RegExp("[0-9]{3,4}[a-zA-Z]{0,1}[ ][0-9]{4}[ ][0-9]{3}[ ][0-9]{0,3}"); // finished APN expression
 
             let originalAPN, apn, permitNum, issuedDate, permitType, valuation, applicantName, permitDesc;
             worksheet.eachRow((row) => {
@@ -35,6 +35,8 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
                     // apn logic
                     if (regex1.test(apn)) {
                         let apnArray = apn.split(delimiter);
+                        // 444-0060-990-132 -> 444 0060990132
+                        // 44A-0060-990-132 -> 044A0060990132
 
                         let book = apnArray[0] === undefined ? "" : apnArray[0].replace(/\s/g, ""); // remove all spaces
                         let page = apnArray[1] === undefined ? "" : apnArray[1].replace(/\s/g, "");
@@ -42,7 +44,12 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
                         let subPN = apnArray[3] === undefined ? "00" : apnArray[3].replace(/\s/g, "");
 
                         if (book.length < 4) {
-                            book = book + " ";
+                            if (book.match(/[a-z]/i)) { // if the book is 2 or 3 characters and has an alpha character
+                                // we want to add a leading zero
+                                book = "0" + book;
+                            } else {
+                                book = book + " ";
+                            }
                         }
                         // concatenate all 4 strings
                         apn = book + page +  parcel + subPN;
@@ -88,8 +95,8 @@ let readAndCreate = (workbook, readPath, writePath, worksheetName, delimiter) =>
 
             let sheet = writeBook.addWorksheet("Sheet 1");
             sheet.columns = [
-                { header: "Original Parcel Number", key: "originalAPN", width: 15 },
-                { header: "Parcel Number", key: "apn", width: 15 },  // A
+                { header: "Original Parcel Number", key: "originalAPN", width: 16 },
+                { header: "Parcel Number", key: "apn", width: 16 },  // A
                 { header: "Permit Number", key: "permitNum", width: 15 }, // B
                 { header: "Issued Date", key: "issueDate", width: 15 }, // C
                 { header: "Permit Type", key: "permitType", width: 15 },  // D
