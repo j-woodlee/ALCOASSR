@@ -27,13 +27,12 @@ workbook.xlsx.readFile(readPath)
 
         let worksheet = workbook.getWorksheet(worksheetName);
 
-        let regex1 = new RegExp("[0-9]{2,4}[a-zA-Z]{0,1}([-]{1}|[ ]{1})[0-9]{4}([-]{1}|[ ]{1})[0-9]{3}([-]{1}|[ ]{1})[0-9]{0,3}"); // apns that need formatting
-        let regex2 = new RegExp("[0-9]{3}-[0-9]{3,4}-[0-9]{1,2}"); // another format for APNs
+        let regex1 = new RegExp("^[0-9]{2,4}[a-zA-Z]{0,1}([-]{1}|[ ]{1})[0-9]{4}([-]{1}|[ ]{1})[0-9]{3}([-]{1}|[ ]{1})[0-9]{0,3}$"); // apns that need formatting
+        let regex2 = new RegExp("^[0-9]{3}-[0-9]{3,4}-[0-9]{1,2}$"); // another format for APNs
+        let regex3 = new RegExp("^[0-9]{3}-[0-9]{3,4}-[0-9]{3}$"); // another format for APNs
 
         let originalAPN, apn, permitNum, issuedDate, permitType, valuation, applicantName, permitDesc;
         worksheet.eachRow((row) => {
-            regex1.lastIndex = 0;
-            regex2.lastIndex = 0;
 
             originalAPN = row.getCell(apnIndex).value;
             apn = row.getCell(apnIndex).value;
@@ -47,13 +46,12 @@ workbook.xlsx.readFile(readPath)
             // if there is a permit type, add each value in the row to their array
             // only add the rows that have either an already good APN or one that is in the proper format for modification
             if (permitType !== null) {
+                regex1.lastIndex = 0;
+                regex2.lastIndex = 0;
 
                 // apn logic
                 if (regex1.test(apn)) {
                     let apnArray = apn.split(delimiter);
-                    // 444-0060-990-132 -> 444 0060990132
-                    // 44A-0060-990-132 -> 044A0060990132
-                    // 901-201-108
                     let book = apnArray[0] === undefined ? "" : apnArray[0].replace(/\s/g, ""); // remove all spaces if it is not undefined
                     let page = apnArray[1] === undefined ? "" : apnArray[1].replace(/\s/g, "");
                     let parcel = apnArray[2] === undefined ? "" : apnArray[2].replace(/\s/g, "");
@@ -71,12 +69,14 @@ workbook.xlsx.readFile(readPath)
                     // concatenate all 4 strings to create the complete parcel number
                     apn = book + page +  parcel + subPN;
                 } else if (regex2.test(apn)) {
-                    // 901-201-108 > 901 0201010800
                     let apnArray = apn.split("-");
-
                     let page = apnArray[1].length > 3 ? apnArray[1] : "0" + apnArray[1];
                     let parcel = apnArray[2].length > 1 ? "0" + apnArray[2] : "00" + apnArray[2];
                     apn = apnArray[0] + " " + page + parcel + "00";  // book + page + parcel + subPN
+                } else if (regex3.test(apn)) {
+                    let apnArray = apn.split("-");
+                    let page = apnArray[1].length > 3 ? apnArray[1] : "0" + apnArray[1];
+                    apn = apnArray[0] + " " + page + apnArray[2] + "00";  // book + page + parcel + subPN
                 }
 
                 // permit number logic
