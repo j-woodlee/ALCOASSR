@@ -48,6 +48,7 @@ workbook.xlsx.readFile(readPath)
             if (permitType !== null) {
                 regex1.lastIndex = 0;
                 regex2.lastIndex = 0;
+                regex3.lastIndex = 0;
 
                 // apn logic
                 if (regex1.test(apn)) {
