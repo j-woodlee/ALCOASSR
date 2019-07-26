@@ -32,7 +32,7 @@ workbook.xlsx.readFile(readPath)
         //NNA-NNNN-NNN-N
         //NNA-NNNN-NNN-NN
         //NNA-NNNN-NNN-NNN
-        //NN-NNNN-NNN-
+        //NN-NNNN-NNN- >
         //NN-NNNN-NNN-N
         //NN-NNNN-NNN-NN
         //NN-NNNN-NNN-NNN
@@ -64,7 +64,7 @@ workbook.xlsx.readFile(readPath)
         // NNN-NNN-NNN
         // NNN-NNNN-NNN
         let regex4 = new RegExp("^[0-9]{3}[a-zA-Z]{1}[ ]{1}[0-9]{9}$"); //another format for APNs
-        //NNNA NNNNNNNNN
+        // NNNA NNNNNNNNN
 
         let originalAPN, apn, permitNum, issuedDate, permitType, valuation, applicantName, permitDesc;
         worksheet.eachRow((row) => {
@@ -88,13 +88,14 @@ workbook.xlsx.readFile(readPath)
                 // apn logic
                 if (regex1.test(apn)) {
                     let apnArray = apn.split("-");
-                    let book = apnArray[0] === undefined ? "" : apnArray[0].replace(/\s/g, ""); // remove all spaces if it is not undefined
-                    let page = apnArray[1] === undefined ? "" : apnArray[1].replace(/\s/g, "");
-                    let parcel = apnArray[2] === undefined ? "" : apnArray[2].replace(/\s/g, "");
-                    let subPN = apnArray[3] === undefined ? "00" : apnArray[3].replace(/\s/g, "");
+                    let book = apnArray[0]; // remove all spaces if it is not undefined
+                    let page = apnArray[1];
+                    let parcel = apnArray[2];
+                    let subPN = apnArray[3] === "" ? "00" : apnArray[3];
+
 
                     if (book.length < 4) {
-                        if (book.match(/[a-z]/i)) { // if the book has an alpha character
+                        if (book.match(/[a-z]/i)) { // if the book has an alpha character and is less than length 4
                             // we want to add a leading zero
                             book = "0" + book;
                         } else {
@@ -103,7 +104,9 @@ workbook.xlsx.readFile(readPath)
                         }
                     }
                     // concatenate all 4 strings to create the complete parcel number
-                    apn = book + page +  parcel + subPN;
+                    console.log(apnArray[3] === "");
+                    console.log("book:" + book + "page:" + page + "parcel:" + parcel + "subPN:" + subPN);
+                    apn = book + page + parcel + subPN;
                 } else if (regex2.test(apn)) {
                     let apnArray = apn.split("-");
                     let page = apnArray[1].length > 3 ? apnArray[1] : "0" + apnArray[1];
@@ -111,14 +114,14 @@ workbook.xlsx.readFile(readPath)
                     apn = apnArray[0] + " " + page + parcel + "00";  // book + page + parcel + subPN
                 } else if (regex3.test(apn)) {
                     let apnArray = apn.split("-");
-                    let page = apnArray[1].length > 3 ? apnArray[1] : "0" + apnArray[1];
+                    let page = apnArray[1].length === 4 ? apnArray[1] : "0" + apnArray[1];
                     apn = apnArray[0] + " " + page + apnArray[2] + "00";  // book + page + parcel + subPN
                 } else if (regex4.test(apn)) {
                     apn = apn.replace(/\s/g, ""); // remove all spaces
                 }
 
                 // permit number logic
-                permitNum = permitNum.toString().substring(0,12); // truncate to 12 characters
+                permitNum = permitNum ? permitNum.toString().substring(0,12) : ""; // truncate to 12 characters
 
                 // description logic
                 permitDesc = ("(" + permitNum + ") " + permitDesc).substring(0,253);
@@ -150,8 +153,8 @@ workbook.xlsx.readFile(readPath)
 
         let sheet = writeBook.addWorksheet("Sheet 1");
         sheet.columns = [
-            { header: "Original Parcel Number", key: "originalAPN", width: 16 },
-            { header: "Parcel Number", key: "apn", width: 16 },  // A
+            { header: "Original Parcel Number", key: "originalAPN", width: 17 },
+            { header: "Parcel Number", key: "apn", width: 17 },  // A
             { header: "Permit Number", key: "permitNum", width: 15 }, // B
             { header: "Issued Date", key: "issueDate", width: 15 }, // C
             { header: "Permit Type", key: "permitType", width: 15 },  // D
