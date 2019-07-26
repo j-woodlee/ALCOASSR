@@ -11,7 +11,7 @@ let readPath = "P:\\Permits List\\Files Received From Unit Supervisors\\" + agen
 
 let worksheetName = year + "-" + month + " " + agency.substring(0,3).toUpperCase() + " Issued";
 
-let delimiter = process.argv[5] ? process.argv[5] : "-";
+// let delimiter = process.argv[5] ? process.argv[5] : "-";
 
 let writePath = "P:\\Permits List\\Upload Files\\Testing\\" + agency + "\\" + year + "\\"
 + year + "-" + month + " " + agency + " Permits" + " parcelized.xlsx";
@@ -87,7 +87,7 @@ workbook.xlsx.readFile(readPath)
 
                 // apn logic
                 if (regex1.test(apn)) {
-                    let apnArray = apn.split(delimiter);
+                    let apnArray = apn.split("-");
                     let book = apnArray[0] === undefined ? "" : apnArray[0].replace(/\s/g, ""); // remove all spaces if it is not undefined
                     let page = apnArray[1] === undefined ? "" : apnArray[1].replace(/\s/g, "");
                     let parcel = apnArray[2] === undefined ? "" : apnArray[2].replace(/\s/g, "");
