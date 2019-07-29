@@ -121,7 +121,7 @@ workbook.xlsx.readFile(readPath)
                 }
 
                 // permit number logic
-                permitNum = permitNum ? permitNum.toString().substring(0,12) : ""; // truncate to 12 characters
+                permitNum = permitNum ? permitNum.toString().substring(0,11) : ""; // truncate to 12 characters
 
                 // description logic
                 permitDesc = ("(" + permitNum + ") " + permitDesc).substring(0,253);
