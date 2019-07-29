@@ -50,6 +50,7 @@ workbook.xlsx.readFile(readPath)
                 regex1.lastIndex = 0;
                 regex2.lastIndex = 0;
                 regex3.lastIndex = 0;
+                regex4.lastIndex = 0;
 
                 // apn logic
                 if (regex1.test(apn)) {
