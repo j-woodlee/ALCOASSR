@@ -3,33 +3,35 @@ Projects for Alameda County Assessor
 
 ## Convert XLSM to XLSX Documentation
 
-Basic structure:
+Structure:
   node ./convertXLSMtoXLSX.js \<agency\> \<year\> \<month\>
 
 
 ## Development Environment / Installation
 
-First, install Git.  Git is a command line utility developed by Linus Torvalds (creator of Linux)
-to manage code repositories.  The download for windows can be found here: https://gitforwindows.org/.
-The install wizard will have a lot of options, it really doesn't matter for the most part what you choose (and it can be changed later)
-but make sure it can be accessed via windows Powershell.  Meaning, by opening Powershell and running \"git --version\"
-you actually see a version number rather than an error.
 
-Then, install Node.js.  Node.js is a Javascript framework with a nice package manager
-which gives you access to a bunch of different functionality (like working with excel and PDFs). https://nodejs.org/en/
-Just go through the wizard there really are not any weird options.
+Optional:
+      First, install Git.  Git is a command line utility developed by Linus Torvalds (creator of Linux)
+      to manage code repositories.  The download for windows can be found here: https://gitforwindows.org/.
+      The install wizard will have a lot of options, it really doesn't matter for the most part what you choose (and it can be changed later)
+      but make sure it can be accessed via windows Powershell.  Meaning, by opening Powershell and running \"git --version\"
+      you actually see a version number rather than an error.
 
-Those are the only things you need to download.
+Essential:
+      Install Node.js.  Node.js is a Javascript framework with a nice package manager
+      which gives you access to a bunch of different functionality (like working with excel and PDFs). https://nodejs.org/en/
+      Just go through the wizard there really are not any weird options.
 
-Open Powershell and navigate to a directory of your choice where you can store code (use the \"cd\" command to change directories).
 
-Then clone this repo by running the command:  \"git clone https://github.com/j-woodlee/ALCOASSR.git"
+Once you have node downloaded, open Powershell and navigate to a directory of your choice where you can store code (use the \"cd\" command to change directories).
 
-Move into the repository by running \"cd ALCOASSR\"
+Then clone this repo by running the command:  \"git clone https://github.com/j-woodlee/ALCOASSR.git" (or if you don't have git just copy convertXLSMtoXLSX.js to your computer manually)
+
+Move into the repository by running \"cd ALCOASSR\" (or move into the directory where you put convertXLSMtoXLSX.js)
 
 You can now simply run the script by typing: \"node ./convertXLSMtoXLSX.js Alameda 2018 10\" (or insert whatever parameters you want)
 
-This script will make the new parcelized file in the P drive (in the test directory for now) depending on parameters.
+The script will take in files from P:\\Permits List\\Files Received From Unit Supervisors\\ and write the output .xlsx file to P:\\Permits List\\Upload Files\\Testing\\
 
 
 ## Script Logic
