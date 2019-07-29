@@ -28,43 +28,9 @@ workbook.xlsx.readFile(readPath)
         let worksheet = workbook.getWorksheet(worksheetName);
 
         let regex1 = new RegExp("^[0-9]{2,4}[a-zA-Z]{0,1}-[0-9]{4}-[0-9]{3}-[0-9]{0,3}$"); // apns that need formatting
-        //NNA-NNNN-NNN-
-        //NNA-NNNN-NNN-N
-        //NNA-NNNN-NNN-NN
-        //NNA-NNNN-NNN-NNN
-        //NN-NNNN-NNN- >
-        //NN-NNNN-NNN-N
-        //NN-NNNN-NNN-NN
-        //NN-NNNN-NNN-NNN
-
-        //NNNA-NNNN-NNN-
-        //NNNA-NNNN-NNN-N
-        //NNNA-NNNN-NNN-NN
-        //NNNA-NNNN-NNN-NNN
-        //NNN-NNNN-NNN-
-        //NNN-NNNN-NNN-N
-        //NNN-NNNN-NNN-NN
-        //NNN-NNNN-NNN-NNN
-
-        //NNNNA-NNNN-NNN-
-        //NNNNA-NNNN-NNN-N
-        //NNNNA-NNNN-NNN-NN
-        //NNNNA-NNNN-NNN-NNN
-        //NNNN-NNNN-NNN-
-        //NNNN-NNNN-NNN-N
-        //NNNN-NNNN-NNN-NN
-        //NNNN-NNNN-NNN-NNN
-
         let regex2 = new RegExp("^[0-9]{3}-[0-9]{3,4}-[0-9]{1,2}$"); // another format for APNs
-        // NNN-NNN-N
-        // NNN-NNN-NN
-        // NNN-NNNN-N
-        // NNN-NNNN-NN
         let regex3 = new RegExp("^[0-9]{3}-[0-9]{3,4}-[0-9]{3}$"); // another format for APNs
-        // NNN-NNN-NNN
-        // NNN-NNNN-NNN
         let regex4 = new RegExp("^[0-9]{3}[a-zA-Z]{1}[ ]{1}[0-9]{9}$"); //another format for APNs
-        // NNNA NNNNNNNNN
 
         let originalAPN, apn, permitNum, issuedDate, permitType, valuation, applicantName, permitDesc;
         worksheet.eachRow((row) => {
@@ -104,8 +70,6 @@ workbook.xlsx.readFile(readPath)
                         }
                     }
                     // concatenate all 4 strings to create the complete parcel number
-                    console.log(apnArray[3] === "");
-                    console.log("book:" + book + "page:" + page + "parcel:" + parcel + "subPN:" + subPN);
                     apn = book + page + parcel + subPN;
                 } else if (regex2.test(apn)) {
                     let apnArray = apn.split("-");
