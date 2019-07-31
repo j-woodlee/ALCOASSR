@@ -4,7 +4,7 @@ let PDFParser = require("pdf2json");
 let pdfParser = new PDFParser();
 
 pdfParser.on("pdfParser_dataError", errData => console.error(errData.parserError) );
-pdfParser.on("pdfParser_dataReady", pdfData => {
+pdfParser.on("pdfParser_dataReady", (pdfData) => {
     let json = pdfParser.getAllFieldsTypes();  //  array of objects
 
     for (let i = 0; i < json.length; i++) { // sloppy but w/e
