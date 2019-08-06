@@ -1,7 +1,7 @@
 # ALCOASSR
 Projects for Alameda County Assessor
 
-## Convert XLSM to XLSX Documentation
+## DEBE Documentation
 
 Structure:
   node ./DEBE.js \<agency\> \<year\> \<month\>
