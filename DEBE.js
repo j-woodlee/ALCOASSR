@@ -27,7 +27,7 @@ workbook.xlsx.readFile(readPath)
 
         let worksheet = workbook.getWorksheet(worksheetName);
 
-        let regex1 = new RegExp("^[0-9]{2,4}[a-zA-Z]{0,1}-[0-9]{4}-[0-9]{3}-[0-9]{0,3}$"); // apns that need formatting
+        let regex1 = new RegExp("^[0-9]{2,4}[a-zA-Z]{0,1}-[0-9]{4}-[0-9]{3}-[0-9]{0,3}[ ]*$"); // apns that need formatting
         let regex2 = new RegExp("^[0-9]{3}-[0-9]{3,4}-[0-9]{1,2}$"); // another format for APNs
         let regex3 = new RegExp("^[0-9]{3}-[0-9]{3,4}-[0-9]{3}$"); // another format for APNs
         let regex4 = new RegExp("^[0-9]{3}[a-zA-Z]{1}[ ]{1}[0-9]{9}$"); //another format for APNs
@@ -54,12 +54,12 @@ workbook.xlsx.readFile(readPath)
 
                 // apn logic
                 if (regex1.test(apn)) {
+
                     let apnArray = apn.split("-");
                     let book = apnArray[0]; // remove all spaces if it is not undefined
                     let page = apnArray[1];
                     let parcel = apnArray[2];
                     let subPN = apnArray[3] === "" ? "00" : apnArray[3];
-
 
                     if (book.length < 4) {
                         if (book.match(/[a-z]/i)) { // if the book has an alpha character and is less than length 4
