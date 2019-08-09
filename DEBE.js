@@ -86,7 +86,11 @@ workbook.xlsx.readFile(readPath)
                 }
 
                 // permit number logic
-                permitNum = permitNum ? permitNum.toString().substring(0,11) : ""; // truncate to 12 characters
+                if (typeof permitNum === "string" || permitNum instanceof String || typeof permitNum === "number") {
+                    permitNum = permitNum ? permitNum.toString().substring(0,11) : "";
+                } else {
+                    permitNum = permitNum.text.substring(0,11);
+                }
 
                 // description logic
                 permitDesc = ("(" + permitNum + ") " + permitDesc).substring(0,253);
