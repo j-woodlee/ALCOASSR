@@ -87,9 +87,9 @@ workbook.xlsx.readFile(readPath)
 
                 // permit number logic
                 if (typeof permitNum === "string" || permitNum instanceof String || typeof permitNum === "number") {
-                    permitNum = permitNum ? permitNum.toString().substring(0,11) : "";
+                    permitNum = permitNum ? permitNum.toString().substring(0,13) : "";
                 } else {
-                    permitNum = permitNum.text.substring(0,11);
+                    permitNum = permitNum.text.substring(0,13);
                 }
 
                 // description logic
