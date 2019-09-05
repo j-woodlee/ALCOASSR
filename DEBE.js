@@ -89,7 +89,7 @@ workbook.xlsx.readFile(readPath)
                 if (typeof permitNum === "string" || permitNum instanceof String || typeof permitNum === "number") {
                     permitNum = permitNum ? permitNum.toString().substring(0,13) : "";
                 } else {
-                    permitNum = permitNum.text.substring(0,13);
+                    permitNum = permitNum.text.substring(0,14);
                 }
 
                 // description logic
