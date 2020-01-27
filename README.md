@@ -25,9 +25,9 @@ Structure:
 
 Once you have node downloaded, open Powershell and navigate to a directory of your choice where you can store code (use the \"cd\" command to change directories).
 
-Then clone this repo by running the command:  \"git clone https://github.com/j-woodlee/ALCOASSR.git" (or if you don't have git just copy convertXLSMtoXLSX.js and node_modules to your computer manually)
+Then clone this repo by running the command:  \"git clone https://github.com/j-woodlee/ALCOASSR.git" (or if you don't have git just copy DEBE.js and node_modules to your computer manually)
 
-Move into the repository by running \"cd ALCOASSR\" (or move into the directory where you put convertXLSMtoXLSX.js)
+Move into the repository by running \"cd ALCOASSR\" (or move into the directory where you put DEBE.js)
 
 You can now simply run the script by typing: \"node ./DEBE.js Alameda 2018 10\" (or insert whatever parameters you want)
 
