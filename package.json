@@ -19,7 +19,7 @@
   "dependencies": {
     "exceljs": "^1.9.1",
     "fstream": "^1.0.12",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "pdfjs-dist": "^2.0.943",
     "webpack": "^3.0.0"
   },
