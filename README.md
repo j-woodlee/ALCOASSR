@@ -3,6 +3,8 @@ Projects for Alameda County Assessor
 
 ## DEBE Documentation
 
+note: node_modules were committed so NPM doesn't have to be used.  This is obviously not ideal, but it was done anyway for a variety of reasons.
+
 Structure:
   node ./DEBE.js \<agency\> \<year\> \<month\>
 
