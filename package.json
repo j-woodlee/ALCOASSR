@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/j-woodlee/ALCOASSR#readme",
   "dependencies": {
-    "exceljs": "^1.9.1",
+    "exceljs": "^1.15.0",
     "fstream": "^1.0.12",
     "lodash": "^4.17.19",
     "pdfjs-dist": "^2.0.943",
