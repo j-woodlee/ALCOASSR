@@ -25,6 +25,6 @@
   },
   "devDependencies": {
     "eslint": "^5.16.0",
-    "pdf2json": "^1.1.8"
+    "pdf2json": "^1.3.1"
   }
 }
